@@ -18,16 +18,18 @@
 
 ## Визуальная схема фронтенда
 
-![Экран добавления Translation](docs/images/Add_Question_Screen.png)
+![Экран добавления Translation](docs/marketing/images/Add_Question_Screen.png)
 
 ## Документация
 
 1. Маркетинг
-    1. [Заинтересанты](docs/01-stakeholders.md)
-    2. [Целевая аудитория](docs/02-target-audience.md)
-    3. [Конкурентный анализ](docs/03-сompetitive-analysis.md)
-    4. [Анализ экономики](docs/04-economic-analysis.md)
-    5. [Пользовательские истории](docs/05-user-stories.md)
+   1. [Заинтересанты](docs/marketing/01-stakeholders.md)
+   2. [Целевая аудитория](docs/marketing/02-target-audience.md)
+   3. [Конкурентный анализ](docs/marketing/03-сompetitive-analysis.md)
+   4. [Анализ экономики](docs/marketing/04-economic-analysis.md)
+   5. [Пользовательские истории](docs/marketing/05-user-stories.md)
 2. DevOps
+   1. [Схема инфраструктуры](docs/devops/01-infrastruture.md)
+   2. [Схема мониторинга](docs/devops/02-monitoring.md)
 3. Тесты
 4. Архитектура
