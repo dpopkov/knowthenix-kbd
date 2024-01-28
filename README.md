@@ -33,3 +33,6 @@
    2. [Схема мониторинга](docs/devops/02-monitoring.md)
 3. Тесты
 4. Архитектура
+   1. [Компонентная схема](docs/architecture/01-arch.md)
+   2. [Интеграционная схема](docs/architecture/02-integration.md)
+   3. [Описание API](docs/architecture/03-api.md)
