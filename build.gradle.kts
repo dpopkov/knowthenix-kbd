@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") apply false
 }
 
-group = "io.dpopkov"
+group = "io.dpopkov.knowthenixkbd"
 version = "1.0-SNAPSHOT"
 
 repositories {
