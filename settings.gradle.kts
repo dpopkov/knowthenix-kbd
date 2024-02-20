@@ -20,3 +20,6 @@ rootProject.name = "knowthenix-kbd"
 include("hello")
 include("translation-api-v1-jackson")
 include("translation-api-v2-kmp")
+include("translation-common")
+include("translation-mappers-v1")
+include("translation-mappers-v2")
