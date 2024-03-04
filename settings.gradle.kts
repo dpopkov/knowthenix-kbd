@@ -4,10 +4,13 @@ pluginManagement {
         val kotestVersion: String by settings
         val openapiVersion: String by settings
         val cwpGeneratorVersion: String by settings
+        val ktorVersion: String by settings
 
         kotlin("jvm") version kotlinVersion
         kotlin("multiplatform") version kotlinVersion
         kotlin("plugin.serialization") version kotlinVersion apply false
+
+        id("io.ktor.plugin") version ktorVersion apply false
 
         id("io.kotest.multiplatform") version kotestVersion apply false
         id("org.openapi.generator") version openapiVersion apply false
@@ -25,3 +28,4 @@ include("translation-mappers-v1")
 include("translation-mappers-v2")
 include("translation-stubs")
 include("translation-biz")
+include("translation-app-ktor")

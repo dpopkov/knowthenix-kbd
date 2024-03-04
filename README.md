@@ -42,3 +42,12 @@
 4. [translation-common](translation-common) - общие классы для модулей проекта, содержит внутренние модели и контекст
 5. [translation-mappers-v1](translation-mappers-v1) - мапперы между внутренними моделями и моделями API v1
 6. [translation-mappers-v2](translation-mappers-v2) - мапперы между внутренними моделями и моделями API v2
+
+## Фреймворки
+
+1. [translation-app-ktor](translation-app-ktor) - приложение на Ktor JVM/Native
+
+## Модули бизнес-логики
+
+1. [translation-stubs](translation-stubs) - стабы для ответов сервиса
+2. [translation-biz](translation-biz) - бизнес-логика приложения: обслуживание стабов, валидация, работа с БД
