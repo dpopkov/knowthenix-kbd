@@ -60,7 +60,7 @@ class MappersV1Test {
                 )
             ),
         )
-        val resp: TranslationCreateResponse = context.toTransportTranslation() as TranslationCreateResponse
+        val resp: TranslationCreateResponse = context.toTransportTranslationV1() as TranslationCreateResponse
 
         assertEquals("create", resp.responseType)
         assertEquals("1234", resp.requestId)

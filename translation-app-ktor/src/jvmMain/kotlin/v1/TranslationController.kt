@@ -4,7 +4,7 @@ import io.dpopkov.knowthenixkbd.api.v1.models.*
 import io.dpopkov.knowthenixkbd.biz.KnthTranslationProcessor
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.mappers.v1.fromTransport
-import io.dpopkov.knowthenixkbd.mappers.v1.toTransportTranslation
+import io.dpopkov.knowthenixkbd.mappers.v1.toTransportTranslationV1
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -36,5 +36,5 @@ private suspend fun ApplicationCall.processAndRespond(
     val context = KnthContext()
     context.fromTransport(request)
     processor.exec(context)
-    respond(context.toTransportTranslation())
+    respond(context.toTransportTranslationV1())
 }
