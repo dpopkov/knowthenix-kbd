@@ -1,6 +1,5 @@
 package io.dpopkov.knowthenixkbd.app.ktor
 
-import io.dpopkov.knowthenixkbd.biz.KnthTranslationProcessor
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -12,7 +11,7 @@ class ApplicationTest {
     @Test
     fun testRootEndpoint() = testApplication {
         application {
-            module(KnthTranslationProcessor())
+            module(KnthAppSettings())
         }
         val response = client.get("/")
         assertEquals(HttpStatusCode.OK, response.status)

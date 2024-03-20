@@ -23,6 +23,7 @@ dependencies {
 
     // Common models
     implementation(project(":translation-common"))
+    implementation(project(":translation-app-common"))
 
     // v1 api
     implementation(project(":translation-api-v1-jackson"))

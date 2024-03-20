@@ -1,8 +1,8 @@
 package io.dpopkov.knowthenixkbd.app.ktor
 
 import io.dpopkov.knowthenixkbd.api.v1.apiV1Mapper
+import io.dpopkov.knowthenixkbd.app.ktor.plugins.initAppSettings
 import io.dpopkov.knowthenixkbd.app.ktor.v1.processV1Translation
-import io.dpopkov.knowthenixkbd.biz.KnthTranslationProcessor
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.autohead.*
@@ -16,7 +16,7 @@ import org.slf4j.event.Level
 fun main(args: Array<String>): Unit = io.ktor.server.cio.EngineMain.main(args)
 
 fun Application.moduleJvm() {
-    val processor = KnthTranslationProcessor()
+    val appSettings: KnthAppSettings = initAppSettings()
 
     install(CachingHeaders)
     install(DefaultHeaders)
@@ -24,7 +24,7 @@ fun Application.moduleJvm() {
     install(CallLogging) {
         level = Level.INFO
     }
-    module(processor = processor)
+    module(appSettings)
 
     routing {
         route("v1") {
@@ -34,7 +34,7 @@ fun Application.moduleJvm() {
                     setConfig(apiV1Mapper.deserializationConfig)
                 }
             }
-            processV1Translation(processor)
+            processV1Translation(appSettings)
         }
     }
 }

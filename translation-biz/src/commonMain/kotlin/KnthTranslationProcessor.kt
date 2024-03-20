@@ -2,6 +2,7 @@ package io.dpopkov.knowthenixkbd.biz
 
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.models.KnthCommand
+import io.dpopkov.knowthenixkbd.common.models.KnthState
 import io.dpopkov.knowthenixkbd.common.models.KnthWorkMode
 import io.dpopkov.knowthenixkbd.stubs.KnthTranslationStub
 
@@ -11,6 +12,7 @@ class KnthTranslationProcessor {
             "В настоящий момент работает только в режиме заглушки"
         }
 
+        if (ctx.state == KnthState.NONE) ctx.state = KnthState.RUNNING
         when (ctx.command) {
             KnthCommand.SEARCH -> {
                 ctx.translationsResponse.addAll(KnthTranslationStub.search())

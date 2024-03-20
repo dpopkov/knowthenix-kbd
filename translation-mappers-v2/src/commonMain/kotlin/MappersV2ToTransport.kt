@@ -19,35 +19,35 @@ fun KnthContext.toTransportTranslationV2(): IResponse = when(val cmd = command) 
  */
 private fun KnthContext.toTransportCreate() = TranslationCreateResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == KnthState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toResultV2(),
     errors = errors.toTransportErrors(),
     translation = translationResponse.toTransport(),
 )
 
 private fun KnthContext.toTransportRead() = TranslationReadResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == KnthState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toResultV2(),
     errors = errors.toTransportErrors(),
     translation = translationResponse.toTransport(),
 )
 
 private fun KnthContext.toTransportUpdate() = TranslationUpdateResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == KnthState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toResultV2(),
     errors = errors.toTransportErrors(),
     translation = translationResponse.toTransport(),
 )
 
 private fun KnthContext.toTransportDelete() = TranslationDeleteResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == KnthState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toResultV2(),
     errors = errors.toTransportErrors(),
     translation = translationResponse.toTransport(),
 )
 
 private fun KnthContext.toTransportSearch() = TranslationSearchResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == KnthState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toResultV2(),
     errors = errors.toTransportErrors(),
     translations = translationsResponse.toTransport()
 )
@@ -123,4 +123,10 @@ private fun KnthTranslationPermissionClient.toTransport(): TranslationPermission
     KnthTranslationPermissionClient.MAKE_VISIBLE_GROUP -> TranslationPermissions.MAKE_VISIBLE_GROUP
     KnthTranslationPermissionClient.MAKE_VISIBLE_REGISTERED -> TranslationPermissions.MAKE_VISIBLE_REGISTERED
     KnthTranslationPermissionClient.MAKE_VISIBLE_PUBLIC -> TranslationPermissions.MAKE_VISIBLE_PUBLIC
+}
+
+private fun KnthState.toResultV2(): ResponseResult? = when (this) {
+    KnthState.RUNNING, KnthState.FINISHING -> ResponseResult.SUCCESS
+    KnthState.FAILING -> ResponseResult.ERROR
+    KnthState.NONE -> null
 }

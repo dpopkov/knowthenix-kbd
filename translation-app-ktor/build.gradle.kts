@@ -54,6 +54,7 @@ kotlin {
                 implementation(ktorServer("content-negotiation"))
 
                 implementation(project(":translation-common"))
+                implementation(project(":translation-app-common"))
                 implementation(project(":translation-biz"))
 
                 // API v2
