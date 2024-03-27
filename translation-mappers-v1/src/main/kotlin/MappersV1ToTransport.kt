@@ -5,7 +5,7 @@ import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.models.*
 import io.dpopkov.knowthenixkbd.mappers.v1.exceptions.UnknownKnthCommand
 
-fun KnthContext.toTransportTranslation(): IResponse = when(val cmd = command) {
+fun KnthContext.toTransportTranslationV1(): IResponse = when(val cmd = command) {
     KnthCommand.CREATE -> toTransportCreate()
     KnthCommand.READ -> toTransportRead()
     KnthCommand.UPDATE -> toTransportUpdate()
@@ -75,10 +75,10 @@ private fun KnthTranslation.toTransport(): TranslationResponseObject {
     return TranslationResponseObject(
         id = this.id.takeIf { it != KnthTranslationId.NONE }?.asString(),
         language = this.language.takeIf { it.isNotBlank() },
-        formatSyntax = this.formatSyntax.toTransport(),
+        formatSyntax = this.formatSyntax.toTransportV1(),
         content = this.content.takeIf { it.isNotBlank() },
-        state = this.state.toTransport(),
-        visibility = this.visibility.toTransport(),
+        state = this.state.toTransportV1(),
+        visibility = this.visibility.toTransportV1(),
         ownerId = this.ownerId.takeIf { it != KnthUserId.NONE }?.asString(),
         lock = this.lock.takeIf { it != KnthTranslationLock.NONE }?.asString(),
         permissions = this.permissionsClient.toTransport(),
@@ -98,20 +98,20 @@ private fun List<KnthTranslation>.toTransport(): List<TranslationResponseObject>
  * Enum Mappers.
  * Все экземпляры enum преобразуются один в один для контроля над возможными ошибками при будущем расширении.
  */
-private fun KnthFormatSyntax.toTransport(): TranslationSyntax? = when (this) {
+fun KnthFormatSyntax.toTransportV1(): TranslationSyntax? = when (this) {
     KnthFormatSyntax.PLAIN_TEXT -> TranslationSyntax.PLAIN_TEXT
     KnthFormatSyntax.MARKDOWN -> TranslationSyntax.MARKDOWN
     KnthFormatSyntax.HTML -> TranslationSyntax.HTML
     KnthFormatSyntax.NONE -> null
 }
 
-private fun KnthTranslationState.toTransport(): TranslationState? = when (this) {
+fun KnthTranslationState.toTransportV1(): TranslationState? = when (this) {
     KnthTranslationState.EDITABLE -> TranslationState.EDITABLE
     KnthTranslationState.NON_EDITABLE -> TranslationState.NON_EDITABLE
     KnthTranslationState.NONE -> null
 }
 
-private fun KnthVisibility.toTransport(): TranslationVisibility? = when (this) {
+fun KnthVisibility.toTransportV1(): TranslationVisibility? = when (this) {
     KnthVisibility.VISIBLE_TO_AUTHOR -> TranslationVisibility.AUTHOR_ONLY
     KnthVisibility.VISIBLE_TO_GROUP -> TranslationVisibility.GROUP_ONLY
     KnthVisibility.VISIBLE_TO_REGISTERED -> TranslationVisibility.REGISTERED_ONLY

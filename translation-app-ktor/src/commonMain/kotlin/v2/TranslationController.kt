@@ -1,40 +1,25 @@
 package io.dpopkov.knowthenixkbd.app.ktor.v2
 
 import io.dpopkov.knowthenixkbd.api.v2.models.*
-import io.dpopkov.knowthenixkbd.biz.KnthTranslationProcessor
-import io.dpopkov.knowthenixkbd.common.KnthContext
-import io.dpopkov.knowthenixkbd.mappers.v2.fromTransport
-import io.dpopkov.knowthenixkbd.mappers.v2.toTransportTranslation
+import io.dpopkov.knowthenixkbd.app.ktor.KnthAppSettings
 import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
 
-suspend fun ApplicationCall.createTranslation(processor: KnthTranslationProcessor) {
-    processAndRespond(receive<TranslationCreateRequest>(), processor)
+suspend fun ApplicationCall.createTranslation(appSettings: KnthAppSettings) {
+    processV2<TranslationCreateRequest, TranslationCreateResponse>(appSettings)
 }
 
-suspend fun ApplicationCall.readTranslation(processor: KnthTranslationProcessor) {
-    processAndRespond(receive<TranslationReadRequest>(), processor)
+suspend fun ApplicationCall.readTranslation(appSettings: KnthAppSettings) {
+    processV2<TranslationReadRequest, TranslationReadResponse>(appSettings)
 }
 
-suspend fun ApplicationCall.updateTranslation(processor: KnthTranslationProcessor) {
-    processAndRespond(receive<TranslationUpdateRequest>(), processor)
+suspend fun ApplicationCall.updateTranslation(appSettings: KnthAppSettings) {
+    processV2<TranslationUpdateRequest, TranslationUpdateResponse>(appSettings)
 }
 
-suspend fun ApplicationCall.deleteTranslation(processor: KnthTranslationProcessor) {
-    processAndRespond(receive<TranslationDeleteRequest>(), processor)
+suspend fun ApplicationCall.deleteTranslation(appSettings: KnthAppSettings) {
+    processV2<TranslationDeleteRequest, TranslationDeleteResponse>(appSettings)
 }
 
-suspend fun ApplicationCall.searchTranslation(processor: KnthTranslationProcessor) {
-    processAndRespond(receive<TranslationSearchRequest>(), processor)
-}
-
-private suspend fun ApplicationCall.processAndRespond(
-    request: IRequest,
-    processor: KnthTranslationProcessor
-) {
-    val context = KnthContext()
-    context.fromTransport(request)
-    processor.exec(context)
-    respond(context.toTransportTranslation())
+suspend fun ApplicationCall.searchTranslation(appSettings: KnthAppSettings) {
+    processV2<TranslationSearchRequest, TranslationSearchResponse>(appSettings)
 }

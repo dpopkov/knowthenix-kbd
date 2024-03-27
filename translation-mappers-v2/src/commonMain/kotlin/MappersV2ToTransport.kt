@@ -5,7 +5,7 @@ import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.models.*
 import io.dpopkov.knowthenixkbd.mappers.v2.exceptions.UnknownKnthCommand
 
-fun KnthContext.toTransportTranslation(): IResponse = when(val cmd = command) {
+fun KnthContext.toTransportTranslationV2(): IResponse = when(val cmd = command) {
     KnthCommand.CREATE -> toTransportCreate()
     KnthCommand.READ -> toTransportRead()
     KnthCommand.UPDATE -> toTransportUpdate()
@@ -19,35 +19,35 @@ fun KnthContext.toTransportTranslation(): IResponse = when(val cmd = command) {
  */
 private fun KnthContext.toTransportCreate() = TranslationCreateResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == KnthState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toResultV2(),
     errors = errors.toTransportErrors(),
     translation = translationResponse.toTransport(),
 )
 
 private fun KnthContext.toTransportRead() = TranslationReadResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == KnthState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toResultV2(),
     errors = errors.toTransportErrors(),
     translation = translationResponse.toTransport(),
 )
 
 private fun KnthContext.toTransportUpdate() = TranslationUpdateResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == KnthState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toResultV2(),
     errors = errors.toTransportErrors(),
     translation = translationResponse.toTransport(),
 )
 
 private fun KnthContext.toTransportDelete() = TranslationDeleteResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == KnthState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toResultV2(),
     errors = errors.toTransportErrors(),
     translation = translationResponse.toTransport(),
 )
 
 private fun KnthContext.toTransportSearch() = TranslationSearchResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == KnthState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toResultV2(),
     errors = errors.toTransportErrors(),
     translations = translationsResponse.toTransport()
 )
@@ -70,11 +70,11 @@ private fun KnthTranslation.toTransport(): TranslationResponseObject {
     return TranslationResponseObject(
         id = this.id.takeIf { it != KnthTranslationId.NONE }?.asString(),
         language = this.language.takeIf { it.isNotBlank() },
-        formatSyntax = this.formatSyntax.toTransport(),
+        formatSyntax = this.formatSyntax.toTransportV2(),
         content = this.content.takeIf { it.isNotBlank() },
-        state = this.state.toTransport(),
+        state = this.state.toTransportV2(),
         questionId = this.questionId.takeIf { it != KnthQuestionId.NONE }?.asString(),
-        visibility = this.visibility.toTransport(),
+        visibility = this.visibility.toTransportV2(),
         ownerId = this.ownerId.takeIf { it != KnthUserId.NONE }?.asString(),
         lock = this.lock.takeIf { it != KnthTranslationLock.NONE }?.asString(),
         permissions = this.permissionsClient.toTransport(),
@@ -94,20 +94,20 @@ private fun List<KnthTranslation>.toTransport(): List<TranslationResponseObject>
  * Enum Mappers.
  * Все экземпляры enum преобразуются один в один для контроля над возможными ошибками при будущем расширении.
  */
-private fun KnthFormatSyntax.toTransport(): TranslationSyntax? = when (this) {
+fun KnthFormatSyntax.toTransportV2(): TranslationSyntax? = when (this) {
     KnthFormatSyntax.PLAIN_TEXT -> TranslationSyntax.PLAIN_TEXT
     KnthFormatSyntax.MARKDOWN -> TranslationSyntax.MARKDOWN
     KnthFormatSyntax.HTML -> TranslationSyntax.HTML
     KnthFormatSyntax.NONE -> null
 }
 
-private fun KnthTranslationState.toTransport(): TranslationState? = when (this) {
+fun KnthTranslationState.toTransportV2(): TranslationState? = when (this) {
     KnthTranslationState.EDITABLE -> TranslationState.EDITABLE
     KnthTranslationState.NON_EDITABLE -> TranslationState.NON_EDITABLE
     KnthTranslationState.NONE -> null
 }
 
-private fun KnthVisibility.toTransport(): TranslationVisibility? = when (this) {
+fun KnthVisibility.toTransportV2(): TranslationVisibility? = when (this) {
     KnthVisibility.VISIBLE_TO_AUTHOR -> TranslationVisibility.AUTHOR_ONLY
     KnthVisibility.VISIBLE_TO_GROUP -> TranslationVisibility.GROUP_ONLY
     KnthVisibility.VISIBLE_TO_REGISTERED -> TranslationVisibility.REGISTERED_ONLY
@@ -123,4 +123,10 @@ private fun KnthTranslationPermissionClient.toTransport(): TranslationPermission
     KnthTranslationPermissionClient.MAKE_VISIBLE_GROUP -> TranslationPermissions.MAKE_VISIBLE_GROUP
     KnthTranslationPermissionClient.MAKE_VISIBLE_REGISTERED -> TranslationPermissions.MAKE_VISIBLE_REGISTERED
     KnthTranslationPermissionClient.MAKE_VISIBLE_PUBLIC -> TranslationPermissions.MAKE_VISIBLE_PUBLIC
+}
+
+private fun KnthState.toResultV2(): ResponseResult? = when (this) {
+    KnthState.RUNNING, KnthState.FINISHING -> ResponseResult.SUCCESS
+    KnthState.FAILING -> ResponseResult.ERROR
+    KnthState.NONE -> null
 }

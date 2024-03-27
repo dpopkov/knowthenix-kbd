@@ -46,6 +46,7 @@
 ## Фреймворки
 
 1. [translation-app-ktor](translation-app-ktor) - приложение на Ktor JVM/Native
+2. [translation-app-rabbit](translation-app-rabbit) - микросервис на RabbitMQ
 
 ## Модули бизнес-логики
 

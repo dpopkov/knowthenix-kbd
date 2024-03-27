@@ -18,4 +18,6 @@ data class KnthContext(
     var translationFilterRequest: KnthTranslationFilter = KnthTranslationFilter(),
     var translationResponse: KnthTranslation = KnthTranslation(),
     val translationsResponse: MutableList<KnthTranslation> = mutableListOf(),
-)
+) {
+    fun addError(vararg error: KnthError) = errors.addAll(error)
+}

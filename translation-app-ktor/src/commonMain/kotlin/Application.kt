@@ -1,8 +1,8 @@
 package io.dpopkov.knowthenixkbd.app.ktor
 
 import io.dpopkov.knowthenixkbd.api.v2.apiV2Mapper
+import io.dpopkov.knowthenixkbd.app.ktor.plugins.initAppSettings
 import io.dpopkov.knowthenixkbd.app.ktor.v2.processV2Translation
-import io.dpopkov.knowthenixkbd.biz.KnthTranslationProcessor
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -14,7 +14,9 @@ import io.ktor.server.routing.*
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
-fun Application.module(processor: KnthTranslationProcessor = KnthTranslationProcessor()) {
+fun Application.module(
+    appSettings: KnthAppSettings = initAppSettings()
+) {
     install(CORS) {
         allowMethod(HttpMethod.Options)
         allowMethod(HttpMethod.Put)
@@ -33,7 +35,7 @@ fun Application.module(processor: KnthTranslationProcessor = KnthTranslationProc
             install(ContentNegotiation) {
                 json(apiV2Mapper)
             }
-            processV2Translation(processor)
+            processV2Translation(appSettings)
         }
     }
 }
