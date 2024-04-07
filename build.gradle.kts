@@ -2,8 +2,8 @@ plugins {
     kotlin("jvm") apply false
 }
 
-group = "io.dpopkov"
-version = "1.0-SNAPSHOT"
+group = "io.dpopkov.knowthenixkbd"
+version = "0.0.1"
 
 repositories {
     mavenCentral()
