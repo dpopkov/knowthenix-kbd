@@ -10,3 +10,4 @@ plugins {
 rootProject.name = "knowthenix-kbd"
 
 include("hello")
+include("m1l2-basic")
