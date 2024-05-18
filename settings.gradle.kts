@@ -12,3 +12,4 @@ rootProject.name = "knowthenix-kbd"
 include("hello")
 include("m1l2-basic")
 include("m1l3-func")
+include("m1l4-oop")
