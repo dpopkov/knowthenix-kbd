@@ -14,3 +14,5 @@ include("m1l2-basic")
 include("m1l3-func")
 include("m1l4-oop")
 include("m1l5-dsl")
+include("m2l1-coroutines")
+
