@@ -19,6 +19,8 @@ kotlin {
                 executable {
                     entryPoint = "main"
                 }
+//                staticLib {
+//                }
             }
         }
     }
