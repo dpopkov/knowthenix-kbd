@@ -13,3 +13,4 @@ rootProject.name = "knowthenix-kbd"
     Композитные сборки
  */
 includeBuild("lessons")
+includeBuild("knowthenix-be")
