@@ -1,5 +1,10 @@
 plugins {
     kotlin("jvm")
+    application
+}
+
+application {
+    mainClass.set("io.dpopkov.knowthenixkbd.m1l2.MainKt")
 }
 
 dependencies {
