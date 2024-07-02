@@ -9,4 +9,7 @@ plugins {
 }
 rootProject.name = "knowthenix-kbd"
 
+/*
+    Композитные сборки
+ */
 includeBuild("lessons")
