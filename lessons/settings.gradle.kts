@@ -21,3 +21,20 @@ include("m2l2-flows")
 include("m2l3-kmp")
 include("m2l4-1-interop")
 include("m2l4-2-jni")
+include("m2l5-gradle")
+
+/*
+    Примеры подпроектов (пустые).
+*/
+include(":m2l5-gradle:sub1:ssub1", ":m2l5-gradle:sub1:ssub2")
+
+// Явное указание пути для подпроекта
+include(":m2l5-gradle-sub2")
+project(":m2l5-gradle-sub2").apply {
+    projectDir = file("m2l5-gradle/sub2")
+    name = "m2l5-custom-sub2"
+}
+
+// Включает конструкцию вида:
+// implementation(projects.m2l5Gradle.sub1.ssub1)
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
