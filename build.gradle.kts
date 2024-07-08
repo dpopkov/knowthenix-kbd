@@ -18,3 +18,10 @@ subprojects {
         mavenCentral()
     }
 }
+
+tasks {
+    create("check") {
+        group = "verification"
+        dependsOn(gradle.includedBuild("knowthenix-be").task(":check"))
+    }
+}
