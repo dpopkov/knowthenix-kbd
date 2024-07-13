@@ -28,4 +28,5 @@ plugins {
 // implementation(projects.m2l5Gradle.sub1.ssub1)
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-include(":knowthenix-tmp")
+include(":knowthenix-api-v1-jackson")
+include(":knowthenix-api-v2-kmp")
