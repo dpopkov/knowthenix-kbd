@@ -42,7 +42,7 @@ class RequestV2SerializationTest {
         json.assertContains("visibility", "public")
     }
 
-    private inline fun String.assertContains(attribute: String, value: String) {
+    private fun String.assertContains(attribute: String, value: String) {
         assertContains(this, Regex("\"$attribute\":\\s*\"$value\""))
     }
 

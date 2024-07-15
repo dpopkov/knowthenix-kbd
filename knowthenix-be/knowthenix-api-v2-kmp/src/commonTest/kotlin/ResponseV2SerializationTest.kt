@@ -46,11 +46,11 @@ class ResponseV2SerializationTest {
         json.assertContains("permissions", arrayOf("read", "update"))
     }
 
-    private inline fun String.assertContains(attribute: String, value: String) {
+    private fun String.assertContains(attribute: String, value: String) {
         assertContains(this, Regex("\"$attribute\":\\s*\"$value\""))
     }
 
-    private inline fun String.assertContains(attribute: String, array: Array<String>) {
+    private fun String.assertContains(attribute: String, array: Array<String>) {
         val items = array.joinToString(separator = "\",\"", prefix = "\\[\"", postfix = "\"\\]")
         assertContains(this, Regex("\"$attribute\":\\s*$items"))
     }

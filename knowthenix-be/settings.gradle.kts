@@ -29,4 +29,7 @@ plugins {
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(":knowthenix-api-v1-jackson")
+include(":knowthenix-api-v1-mappers")
 include(":knowthenix-api-v2-kmp")
+
+include(":knowthenix-common")
