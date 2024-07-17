@@ -29,7 +29,7 @@ class SimpleWiremockRootTest : StringSpec({
         val client = HttpClient(OkHttp)
         val response = client.get(getUrl().buildString())
         val bodyString = response.call.response.bodyAsText()
-        bodyString shouldBe "Hello, world!"
+        bodyString shouldBe "Hello, world of containers!"
     }
 
     afterSpec { stop() }
