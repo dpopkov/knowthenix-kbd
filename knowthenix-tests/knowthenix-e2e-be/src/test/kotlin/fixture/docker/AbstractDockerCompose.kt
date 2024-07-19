@@ -10,7 +10,7 @@ private val log = Logger
 /**
  * apps - список приложений в docker-compose. Первое приложение - "главное", его url возвращается как inputUrl
  * (например ваш сервис при работе по rest или брокер сообщений при работе с брокером)
- * dockerComposeName - имя docker-compose файла (относительно ok-marketplace-acceptance/docker-compose)
+ * dockerComposeName - имя docker-compose файла (относительно knowthenix-acceptance/docker-compose)
  */
 abstract class AbstractDockerCompose(
     private val apps: List<AppInfo>,

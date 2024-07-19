@@ -1,4 +1,4 @@
-rootProject.name = "knowthenix-be"
+rootProject.name = "knowthenix-libs"
 
 dependencyResolutionManagement {
     versionCatalogs {
@@ -24,16 +24,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
 }
 
-// Включает конструкцию вида
-// implementation(projects.m2l5Gradle.sub1.ssub1)
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
-include(":knowthenix-api-v1-jackson")
-include(":knowthenix-api-v1-mappers")
-include(":knowthenix-api-v2-kmp")
-include(":knowthenix-api-log1")
-
-include(":knowthenix-common")
-
-include(":knowthenix-app-common")
-include(":knowthenix-app-tmp4log")
+include(":knowthenix-lib-logging-common")
+include(":knowthenix-lib-logging-logback")
+include(":knowthenix-lib-logging-kermit")
+include(":knowthenix-lib-logging-socket")

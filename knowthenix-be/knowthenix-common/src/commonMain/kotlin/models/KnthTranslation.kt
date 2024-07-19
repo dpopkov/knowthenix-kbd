@@ -16,6 +16,8 @@ data class KnthTranslation(
 ) {
     fun isEmpty(): Boolean = this == NONE
 
+    fun isNotEmpty(): Boolean = this != NONE
+
     companion object {
         private val NONE = KnthTranslation()
     }

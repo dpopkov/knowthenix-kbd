@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform) apply false
 }
 
-group = "io.dpopkov.knowthenixkbd"
+group = "io.dpopkov.knowthenixkbd.libs"
 version = "0.0.1"
 
 allprojects {
@@ -17,21 +17,17 @@ subprojects {
     version = rootProject.version
 }
 
-// Расшаривание переменных между проектами
 ext {
     val specDir = layout.projectDirectory.dir("../specs")
     set("spec-v1", specDir.file("specs-translation-v1.yaml").toString())
     set("spec-v2", specDir.file("specs-translation-v2.yaml").toString())
-    set("spec-log1", specDir.file("specs-translation-log1.yaml").toString())
 }
 
 tasks {
-    arrayOf("build", "clean", "check").forEach { tsk ->
+    arrayOf("build", "clean", "check").forEach {tsk ->
         create(tsk) {
             group = "build"
-            dependsOn(subprojects.map {
-                it.getTasksByName(tsk, false)
-            })
+            dependsOn(subprojects.map {  it.getTasksByName(tsk,false)})
         }
     }
 }
