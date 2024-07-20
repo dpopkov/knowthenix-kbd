@@ -35,6 +35,7 @@ include(":knowthenix-api-log1")
 
 include(":knowthenix-common")
 include(":knowthenix-stubs")
+include(":knowthenix-biz")
 
 include(":knowthenix-app-common")
 //include(":knowthenix-app-tmp4log")
