@@ -19,7 +19,6 @@ openApiGenerate {
     apiPackage.set("$openapiGroup.api") // пока не будет использоваться
     modelPackage.set("$openapiGroup.models")
     invokerPackage.set("$openapiGroup.invoker") // пока не будет использоваться
-//    inputSpec.set("$specDir/specs-ad-v1.yaml")
     inputSpec.set(rootProject.ext["spec-v1"] as String) // ссылка на путь к спецификации
 
     /**
