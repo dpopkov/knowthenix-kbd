@@ -39,3 +39,4 @@ include(":knowthenix-biz")
 
 include(":knowthenix-app-common")
 //include(":knowthenix-app-tmp4log")
+include(":knowthenix-app-spring")

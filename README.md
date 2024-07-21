@@ -37,3 +37,6 @@ Web приложение предоставляет пользователю м�
 1. [specs](specs) - описание API в форме OpenAPI-спецификаций
 2. [knowthenix-api-v1-jackson](knowthenix-be/knowthenix-api-v1-jackson) - 1-я версия транспортных модели с Jackson
 3. [knowthenix-api-v2-kmp](knowthenix-be/knowthenix-api-v2-kmp) - 2-я версия транспортных моделей с KMP
+
+### Фреймворки и транспорты
+1. [knowthenix-app-spring](knowthenix-be/knowthenix-app-spring) - Приложение на Spring Framework

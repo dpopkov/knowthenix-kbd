@@ -52,6 +52,6 @@ suspend fun main() {
             msg = "tmp log string message",
             data = ctx.toLogModel("tmp-app-log-data"),
         )
-        delay(1_000)
+        delay(2_000)
     }
 }

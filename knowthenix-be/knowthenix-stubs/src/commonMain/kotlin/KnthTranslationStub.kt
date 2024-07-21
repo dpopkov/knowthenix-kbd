@@ -8,9 +8,9 @@ object KnthTranslationStub {
     fun get(): KnthTranslation = TRANSLATION_EN.copy()
 
     fun prepareSearchList(filter: String) = listOf(
-        translationEn("tr-123-45", "test content"),
-        translationEn("tr-123-46", "test content"),
-        translationEn("tr-123-47", "test content"),
+        translationEn("tr-123-45", filter),
+        translationEn("tr-123-46", filter),
+        translationEn("tr-123-47", filter),
     )
 
     private fun translationEn(id: String, filter: String) =

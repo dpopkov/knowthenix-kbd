@@ -8,10 +8,14 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
+                implementation(libs.coroutines.core)
 
                 // transport models
                 implementation(project(":knowthenix-common"))
                 implementation(project(":knowthenix-api-log1"))
+
+//                implementation(project(":knowthenix-biz"))
+                implementation(projects.knowthenixBiz)
             }
         }
         commonTest {
@@ -19,7 +23,9 @@ kotlin {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
 
-                implementation(libs.coroutines.core)
+                implementation(libs.coroutines.test)
+
+                implementation(project(":knowthenix-api-v2-kmp"))
             }
         }
 
