@@ -1,0 +1,8 @@
+# Конфигурация для spring + (в перспективе) postgresql
+
+version: '3'
+services:
+  app-spring:
+    image: knowthenix-app-spring:0.0.1
+    ports:
+      - "8080:8080"
