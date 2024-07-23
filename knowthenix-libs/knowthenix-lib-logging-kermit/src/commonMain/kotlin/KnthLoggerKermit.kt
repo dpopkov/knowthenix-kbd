@@ -7,7 +7,7 @@ import io.dpopkov.knowthenixkbd.logging.common.IKnthLogWrapper
 import kotlin.reflect.KClass
 
 @Suppress("unused")
-fun mpLoggerKermit(loggerId: String): IKnthLogWrapper {
+fun knthLoggerKermit(loggerId: String): IKnthLogWrapper {
     val logger = Logger(
         config = StaticConfig(
             minSeverity = Severity.Info,
@@ -21,7 +21,7 @@ fun mpLoggerKermit(loggerId: String): IKnthLogWrapper {
 }
 
 @Suppress("unused")
-fun mpLoggerKermit(cls: KClass<*>): IKnthLogWrapper {
+fun knthLoggerKermit(cls: KClass<*>): IKnthLogWrapper {
     val logger = Logger(
         config = StaticConfig(
             minSeverity = Severity.Info,
