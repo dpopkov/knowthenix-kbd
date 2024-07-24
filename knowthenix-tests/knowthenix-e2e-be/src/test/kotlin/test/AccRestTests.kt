@@ -1,5 +1,6 @@
 package io.dpopkov.knowthenixkbd.e2e.be.test
 
+import io.dpopkov.knowthenixkbd.e2e.be.docker.KtorJvmDockerCompose
 import io.dpopkov.knowthenixkbd.e2e.be.docker.SpringDockerCompose
 import io.dpopkov.knowthenixkbd.e2e.be.fixture.BaseFunSpec
 import io.dpopkov.knowthenixkbd.e2e.be.fixture.client.RestClient
@@ -16,3 +17,6 @@ open class AccRestTestBase(dockerCompose: DockerCompose) : BaseFunSpec(dockerCom
 
 @Suppress("unused")
 class AccRestSpringTest : AccRestTestBase(SpringDockerCompose)
+
+@Suppress("unused")
+class AccRestKtorJvmTest : AccRestTestBase(KtorJvmDockerCompose)
