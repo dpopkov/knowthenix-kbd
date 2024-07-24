@@ -39,11 +39,19 @@ dependencies {
     implementation(projects.knowthenixAppCommon)
     implementation(projects.knowthenixBiz)
 
+    // API v1
+    implementation(projects.knowthenixApiV1Jackson)
+    implementation(projects.knowthenixApiV1Mappers)
     // API v2
     implementation(projects.knowthenixApiV2Kmp)
 
     // Stubs
     implementation(projects.knowthenixStubs)
+
+    // jackson
+    implementation(libs.ktor.serialization.jackson)
+    implementation(libs.ktor.server.calllogging)
+    implementation(libs.ktor.server.headers.default)
 
     // Serialization
     implementation(libs.kotlinx.serialization.core)
