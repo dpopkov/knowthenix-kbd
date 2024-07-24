@@ -3,6 +3,7 @@ package io.dpopkov.knowthenixkbd.app.common
 import io.dpopkov.knowthenixkbd.api.log1.mapper.toLogModel
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.helpers.asKnthError
+import io.dpopkov.knowthenixkbd.common.models.KnthCommand
 import io.dpopkov.knowthenixkbd.common.models.KnthState
 import kotlinx.datetime.Clock
 import kotlin.reflect.KClass
@@ -50,6 +51,9 @@ suspend inline fun <T> IKnthAppSettings.controllerHelper(
         // Бизнес-логика обработки исключений,
         // в случае если процессор содержит компонент выполняющий обработку данной ошибки.
         processor.exec(ctx)
+        if (ctx.command == KnthCommand.NONE) {
+            ctx.command = KnthCommand.READ
+        }
         ctx.toResponse()
     }
 
