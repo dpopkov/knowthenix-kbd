@@ -34,6 +34,7 @@ dependencies {
     implementation(libs.ktor.server.negotiation)    // Позволяет договариваться с клиентом о форматах
     implementation(libs.ktor.server.headers.response)
     implementation(libs.ktor.server.headers.caching)
+    implementation(libs.ktor.server.websocket)
 
     implementation(projects.knowthenixCommon)
     implementation(projects.knowthenixAppCommon)

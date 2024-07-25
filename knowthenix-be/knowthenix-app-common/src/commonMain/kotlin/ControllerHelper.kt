@@ -44,7 +44,8 @@ suspend inline fun <T> IKnthAppSettings.controllerHelper(
         logger.error(
             msg = loggingMessage("failed", logId, clazz),
             marker = "BIZ",
-            data = ctx.toLogModel(logId)
+            data = ctx.toLogModel(logId),
+            e = e,
         )
         ctx.state = KnthState.FAILING
         ctx.errors.add(e.asKnthError())

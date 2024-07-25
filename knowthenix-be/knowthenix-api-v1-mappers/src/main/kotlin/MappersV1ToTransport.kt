@@ -11,6 +11,12 @@ fun KnthContext.toTransportTranslation(): IResponse = when (val cmd = command) {
     KnthCommand.UPDATE -> toTransportUpdate()
     KnthCommand.DELETE -> toTransportDelete()
     KnthCommand.SEARCH -> toTransportSearch()
+    KnthCommand.INIT -> toTransportInit()
+    KnthCommand.FINISH -> object: IResponse {
+        override val responseType: String? = null
+        override val result: ResponseResult? = null
+        override val errors: List<Error>? = null
+    }
     KnthCommand.NONE -> throw UnknownKnthCommand(cmd)
 }
 
@@ -42,6 +48,11 @@ fun KnthContext.toTransportSearch() = TranslationSearchResponse(
     result = this.state.toResult(),
     errors = this.errors.toTransportErrors(),
     translations = this.translationsResponse.toTransport()
+)
+
+fun KnthContext.toTransportInit() = TranslationInitResponse(
+    result = state.toResult(),
+    errors = errors.toTransportErrors(),
 )
 
 private fun KnthState.toResult(): ResponseResult? = when (this) {

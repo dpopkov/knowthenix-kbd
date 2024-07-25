@@ -4,6 +4,7 @@ import io.dpopkov.knowthenixkbd.api.v1.apiV1Mapper
 import io.dpopkov.knowthenixkbd.api.v2.apiV2Mapper
 import io.dpopkov.knowthenixkbd.app.ktorjvm.plugins.initAppSettings
 import io.dpopkov.knowthenixkbd.app.ktorjvm.v1.v1Translation
+import io.dpopkov.knowthenixkbd.app.ktorjvm.v1.wsHandlerV1
 import io.dpopkov.knowthenixkbd.app.ktorjvm.v2.v2Translation
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
@@ -17,6 +18,7 @@ import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.websocket.*
 
 fun Application.module(
     appSettings: KnthAppSettings = initAppSettings()
@@ -38,6 +40,7 @@ fun Application.module(
         // TODO: Это временно. В реальном приложении здесь должны быть конкретные настройки.
         anyHost()
     }
+    install(WebSockets)
 
     routing {
         get("/") {
@@ -51,6 +54,9 @@ fun Application.module(
                 }
             }
             v1Translation(appSettings)
+            webSocket("/ws") {  // Endpoint "/v1/ws" будет работать на Websocket
+                wsHandlerV1(appSettings)
+            }
         }
         route("v2") {
             install(ContentNegotiation) {
