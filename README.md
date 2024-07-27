@@ -55,20 +55,20 @@ Web приложение предоставляет пользователю м�
    внутренними моделями и моделями логирования.
 
 #### Фреймворки и транспорты
-1. [knowthenix-app-spring](knowthenix-be/knowthenix-app-spring) - Приложение Spring
-2. [knowthenix-app-ktor-kmp](knowthenix-be/knowthenix-app-ktor-kmp) - Приложение Ktor на KMP
+1. [knowthenix-app-spring](knowthenix-be/knowthenix-app-spring) - Приложение Spring.
+2. [knowthenix-app-ktor-kmp](knowthenix-be/knowthenix-app-ktor-kmp) - Приложение Ktor на KMP (отключено в settings.gradle.kts).
+3. [knowthenix-app-ktor-jvm](knowthenix-be/knowthenix-app-ktor-jvm) - Приложение Ktor на JVM, 
+   также содержит endpoint на websocket.
 
 ### Библиотеки
 
 #### Мониторинг и логирование
 
 1. [deploy](deploy) - Инструменты мониторинга и деплоя
-2. [knowthenix-lib-logging-common](knowthenix-libs/knowthenix-lib-logging-common) - Общие объявления для
-   логирования
+2. [knowthenix-lib-logging-common](knowthenix-libs/knowthenix-lib-logging-common) - Общие объявления для логирования
 3. [knowthenix-lib-logging-kermit](knowthenix-libs/knowthenix-lib-logging-kermit) - Логирование на базе Kermit
 4. [knowthenix-lib-logging-logback](knowthenix-libs/knowthenix-lib-logging-logback) - Логирование на базе Logback
-5. [knowthenix-lib-logging-socket](knowthenix-libs/knowthenix-lib-logging-socket) - Логирование на базе Ktor и 
-   протокола TCP socket
+5. [knowthenix-lib-logging-socket](knowthenix-libs/knowthenix-lib-logging-socket) - Логирование на базе протокола TCP socket
 
 ### Тестирование
 
