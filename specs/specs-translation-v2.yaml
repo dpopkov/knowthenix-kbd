@@ -1,0 +1,450 @@
+openapi: 3.0.3
+info:
+  title: "Knowthenix ${VERSION_APP}"
+  description: This is a multilingual knowledge service
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/v2
+tags:
+  - name: translation
+    description: Перевод (вопроса, ответа или статьи)
+paths:
+  /translation/create:
+    post:
+      tags:
+        - translation
+      summary: Create translation
+      operationId: translationCreate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslationCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslationCreateResponse'
+  /translation/read:
+    post:
+      tags:
+        - translation
+      summary: Read translation
+      operationId: translationRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslationReadRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslationReadResponse'
+  /translation/update:
+    post:
+      tags:
+        - translation
+      summary: Update translation
+      operationId: translationUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslationUpdateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslationUpdateResponse'
+  /translation/delete:
+    post:
+      tags:
+        - translation
+      summary: Delete translation
+      operationId: translationDelete
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslationDeleteRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslationDeleteResponse'
+  /translation/search:
+    post:
+      tags:
+        - translation
+      summary: Search translation
+      operationId: translationSearch
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslationSearchRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslationSearchResponse'
+
+components:
+  schemas:
+
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дискриминатор для вычисления типа запроса. Используется для websockets или брокеров.
+          example: create
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/TranslationCreateRequest'
+          read: '#/components/schemas/TranslationReadRequest'
+          update: '#/components/schemas/TranslationUpdateRequest'
+          delete: '#/components/schemas/TranslationDeleteRequest'
+          search: '#/components/schemas/TranslationSearchRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          description: Код ответа, согласованный с фронтендом.
+          type: string
+        group:
+          description: Группа ошибки.
+          type: string
+        field:
+          description: Поле являющееся источником ошибки.
+          type: string
+        message:
+          description: Сообщение об ошибке.
+          type: string
+
+    ResponseResult:
+      type: string
+      description: Перечисление возможных статусов ответа.
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса. Используется для websockets или брокеров.
+          example: create
+        result:
+          description: Статус ответа.
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/TranslationCreateResponse'
+          read: '#/components/schemas/TranslationReadResponse'
+          update: '#/components/schemas/TranslationUpdateResponse'
+          delete: '#/components/schemas/TranslationDeleteResponse'
+          search: '#/components/schemas/TranslationSearchResponse'
+          init: '#/components/schemas/TranslationInitResponse'
+
+    UserId:
+      type: string
+      description: Идентификатор пользователя
+    TranslationId:
+      type: string
+      description: Идентификатор перевода
+    TranslationLock:
+      type: string
+      description: Версия оптимистичной блокировки
+    TranslationVisibility:
+      type: string
+      description: 'Тип видимости перевода для пользователей'
+      enum:
+        - authorOnly
+        - registeredOnly
+        - public
+    AggregateId:
+      type: string
+      description: Идентификатор агрегирующей сущности верхнего уровня (вопрос, ответ, статья), к которой относится перевод
+    SyntaxType:
+      type: string
+      description: тип синтаксиса текста перевода
+      enum:
+        - plainText
+        - markdown
+        - html
+    TranslationState:
+      type: string
+      description: состояние перевода
+      enum:
+        - new
+        - edited
+        - toVerify
+        - verified
+    TranslationType:
+      type: string
+      description: тип перевода
+      enum:
+        - question
+        - answer
+        - article
+        - tutorial
+
+    BaseTranslation:
+      type: object
+      description: Объект описывает свойства, одинаковые для create и update
+      properties:
+        originalId:
+          $ref: '#/components/schemas/TranslationId'
+        language:
+          type: string
+          description: национальный язык перевода
+        content:
+          type: string
+          description: текст перевода
+        syntax:
+          $ref: '#/components/schemas/SyntaxType'
+        trType:
+          $ref: '#/components/schemas/TranslationType'
+        state:
+          $ref: '#/components/schemas/TranslationState'
+        aggregateId:
+          $ref: '#/components/schemas/AggregateId'
+        visibility:
+          $ref: '#/components/schemas/TranslationVisibility'
+
+    TranslationInitResponse:
+      description: Используется в websockets.
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+
+    TranslationCreateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseTranslation'
+
+    TranslationCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/TranslationRequestDebug'
+        - type: object
+          properties:
+            translation:
+              $ref: '#/components/schemas/TranslationCreateObject'
+
+    TranslationReadObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/TranslationId'
+
+    TranslationReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/TranslationRequestDebug'
+        - type: object
+          properties:
+            translation:
+              $ref: '#/components/schemas/TranslationReadObject'
+
+    TranslationUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseTranslation'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/TranslationId'
+            lock:
+              $ref: '#/components/schemas/TranslationLock'
+
+    TranslationUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/TranslationRequestDebug'
+        - type: object
+          properties:
+            translation:
+              $ref: '#/components/schemas/TranslationUpdateObject'
+
+    TranslationDeleteObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/TranslationId'
+            lock:
+              $ref: '#/components/schemas/TranslationLock'
+
+    TranslationDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/TranslationRequestDebug'
+        - type: object
+          properties:
+            translation:
+              $ref: '#/components/schemas/TranslationDeleteObject'
+
+    TranslationSearchFilter:
+      type: object
+      description: Набор фильтров для поиска
+      properties:
+        searchString:
+          type: string
+          description: Поисковая строка, которая будет искаться в переводах
+
+    TranslationSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/TranslationRequestDebug'
+        - type: object
+          properties:
+            translationFilter:
+              $ref: '#/components/schemas/TranslationSearchFilter'
+
+    TranslationPermissions:
+      type: string
+      description: Перечисление доступов для клиента для операций над переводами.
+      enum:
+        - read
+        - update
+        - delete
+        - makeVisiblePublic
+        - makeVisibleOwn
+        - makeVisibleRegistered
+
+    TranslationResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseTranslation'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/TranslationId'
+            ownerId:
+              $ref: '#/components/schemas/UserId'
+            lock:
+              $ref: '#/components/schemas/TranslationLock'
+            permissions:
+              type: array
+              description: Доступы, которыми разрешено пользоваться запрашивающей стороне.
+              uniqueItems: true
+              items:
+                $ref: '#/components/schemas/TranslationPermissions'
+
+    TranslationResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом перевода
+          properties:
+            translation:
+              $ref: '#/components/schemas/TranslationResponseObject'
+
+    TranslationResponseMulti:
+      allOf:
+        - type: object
+          description: Список найденных объектов переводов
+          properties:
+            translations:
+              type: array
+              items:
+                $ref: '#/components/schemas/TranslationResponseObject'
+
+    TranslationCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/TranslationResponseSingle'
+
+    TranslationReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/TranslationResponseSingle'
+
+    TranslationUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/TranslationResponseSingle'
+
+    TranslationDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/TranslationResponseSingle'
+
+    TranslationSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/TranslationResponseMulti'
+
+    # STUBS ======================
+    TranslationRequestDebugMode:
+      type: string
+      enum:
+        - prod  # нормальный запрос, обслуживается как обычно
+        - test  # тестовый запрос
+        - stub  # реальное выполнение запроса не требуется, ожидается ответ в определенном формате
+
+    TranslationRequestDebug:
+      type: object
+      description: Дополнительная структура для обслуживания тестируемости.
+      properties:
+        debug:
+          $ref: '#/components/schemas/TranslationDebug'
+
+    TranslationDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/TranslationRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/TranslationRequestDebugStubs'
+
+    TranslationRequestDebugStubs:
+      type: string
+      description: Перечисление всех стабов
+      enum:
+        - success
+        - notFound
+        - badId
+        - badOriginalId
+        - badAggregateId
+        - badLanguage
+        - badContent
+        - badSyntax
+        - badTrType
+        - badState
+        - badVisibility
+        - cannotDelete
+        - badSearchString
