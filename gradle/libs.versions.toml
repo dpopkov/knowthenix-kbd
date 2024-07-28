@@ -77,6 +77,9 @@ spring-webflux = { module = "org.springframework.boot:spring-boot-starter-webflu
 spring-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version = "2.3.0" }
 spring-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 
+# Message Queues
+kafka-client = { module = "org.apache.kafka:kafka-clients", version = "3.7.0" }
+
 # Testing
 kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
@@ -107,3 +110,4 @@ ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 
 # Docker plugin
 muschko-remote = { id = "com.bmuschko.docker-remote-api", version.ref = "muschko" }
+muschko-java = { id = "com.bmuschko.docker-java-application", version.ref = "muschko" }
