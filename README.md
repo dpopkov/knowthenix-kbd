@@ -59,6 +59,7 @@ Web приложение предоставляет пользователю м�
 2. [knowthenix-app-ktor-kmp](knowthenix-be/knowthenix-app-ktor-kmp) - Приложение Ktor на KMP (отключено в settings.gradle.kts).
 3. [knowthenix-app-ktor-jvm](knowthenix-be/knowthenix-app-ktor-jvm) - Приложение Ktor на JVM, 
    также содержит endpoint на websocket.
+4. [knowthenix-app-kafka](knowthenix-be/knowthenix-app-kafka) - Микросервис на Kafka.
 
 ### Библиотеки
 
