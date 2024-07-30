@@ -6,3 +6,4 @@
 * knowthenix-lib-logging-logback - реализация на Logback (JVM)
 * knowthenix-lib-logging-kermit - реализация на Kermit (мультиплатформенный, однако не пишет в fluent-bit)
 * knowthenix-lib-logging-socket - реализация на socket (мультиплатформенный)
+* knowthenix-lib-cor - библиотека для шаблона CoR
