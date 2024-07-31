@@ -8,9 +8,9 @@ import io.dpopkov.knowthenixkbd.common.models.*
 fun KnthContext.toTransportTranslation(): IResponse = when (val cmd = command) {
     KnthCommand.CREATE -> toTransportCreate()
     KnthCommand.READ -> toTransportRead()
-    KnthCommand.UPDATE -> toTranslationUpdate()
-    KnthCommand.DELETE -> toTranslationDelete()
-    KnthCommand.SEARCH -> toTranslationSearch()
+    KnthCommand.UPDATE -> toTransportUpdate()
+    KnthCommand.DELETE -> toTransportDelete()
+    KnthCommand.SEARCH -> toTransportSearch()
     KnthCommand.INIT -> toTransportInit()
     KnthCommand.FINISH -> throw UnknownKnthCommand(cmd)
     KnthCommand.NONE -> throw UnknownKnthCommand(cmd)
@@ -28,19 +28,19 @@ fun KnthContext.toTransportRead() = TranslationReadResponse(
     translation = this.translationResponse.toTransport()
 )
 
-fun KnthContext.toTranslationUpdate() = TranslationUpdateResponse(
+fun KnthContext.toTransportUpdate() = TranslationUpdateResponse(
     result = this.state.toResult(),
     errors = this.errors.toTransportErrors(),
     translation = this.translationResponse.toTransport()
 )
 
-fun KnthContext.toTranslationDelete() = TranslationDeleteResponse(
+fun KnthContext.toTransportDelete() = TranslationDeleteResponse(
     result = this.state.toResult(),
     errors = this.errors.toTransportErrors(),
     translation = this.translationResponse.toTransport()
 )
 
-fun KnthContext.toTranslationSearch() = TranslationSearchResponse(
+fun KnthContext.toTransportSearch() = TranslationSearchResponse(
     result = this.state.toResult(),
     errors = this.errors.toTransportErrors(),
     translations = this.translationsResponse.toTransport()
