@@ -2,6 +2,7 @@ package io.dpopkov.knowthenixkbd.common
 
 import io.dpopkov.knowthenixkbd.common.models.*
 import io.dpopkov.knowthenixkbd.common.stubs.KnthStubs
+import io.dpopkov.knowthenixkbd.common.ws.IKnthWsSession
 import kotlinx.datetime.Instant
 
 /**
@@ -31,6 +32,9 @@ data class KnthContext(
     var workMode: KnthWorkMode = KnthWorkMode.PROD,
     /** Стаб используемый только в режиме стабов */
     var stubCase: KnthStubs = KnthStubs.NONE,
+
+    /** Информация о текущей websocket сессии, если она есть. */
+    var wsSession: IKnthWsSession = IKnthWsSession.NONE,
 
     /** Идентификатор запроса */
     var requestId: KnthRequestId = KnthRequestId.NONE,

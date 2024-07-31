@@ -1,0 +1,106 @@
+openapi: 3.0.3
+info:
+  title: Knowthenix log models
+  description: Log models for logging services
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+paths: {} # endpoints отсутствуют
+
+components:
+  schemas:
+    CommonLogModel:
+      title: Общая модель лога
+      description: Общая модель лога для всех микросервисов системы
+      type: object
+      properties:
+        messageTime:
+          type: string
+        logId:
+          type: string
+        source:
+          description: Объект источник лога
+          type: string
+        translation:
+          description: Объект для микросервиса переводов
+          $ref: '#/components/schemas/KnthTranslationLogModel'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorLogModel'
+
+    KnthTranslationLogModel:
+      title: Модель лога для микросервиса Knowthenix translation
+      type: object
+      properties:
+        requestId:
+          type: string
+        operation:
+          type: string
+          enum:
+            - create
+            - read
+            - update
+            - delete
+            - search
+            - init
+        requestTranslation:
+          $ref: '#/components/schemas/TranslationLog'
+        requestFilter:
+          $ref: '#/components/schemas/TranslationFilterLog'
+        responseTranslation:
+          $ref: '#/components/schemas/TranslationLog'
+        responseTranslations:
+          type: array
+          items:
+            $ref: '#/components/schemas/TranslationLog'
+
+    ErrorLogModel:
+      title: Модель лога для ошибки
+      type: object
+      properties:
+        message:
+          type: string
+        field:
+          type: string
+        code:
+          type: string
+        level:
+          type: string
+
+    TranslationLog:
+      title: Модель лога для перевода
+      type: object
+      properties:
+        id:
+          type: string
+        originalId:
+          type: string
+        language:
+          type: string
+        content:
+          type: string
+        syntax:
+          type: string
+        trType:
+          type: string
+        state:
+          type: string
+        visibility:
+          type: string
+        ownerId:
+          type: string
+        permissions:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+
+    TranslationFilterLog:
+      title: Модель лога фильтра
+      properties:
+        searchString:
+          type: string
+        ownerId:
+          type: string

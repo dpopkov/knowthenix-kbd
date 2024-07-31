@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.muschko.remote) apply false
+    alias(libs.plugins.muschko.java) apply false
 }
 
 group = "io.dpopkov.knowthenixkbd"
@@ -22,6 +24,7 @@ ext {
     val specDir = layout.projectDirectory.dir("../specs")
     set("spec-v1", specDir.file("specs-translation-v1.yaml").toString())
     set("spec-v2", specDir.file("specs-translation-v2.yaml").toString())
+    set("spec-log1", specDir.file("specs-translation-log1.yaml").toString())
 }
 
 tasks {

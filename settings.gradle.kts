@@ -12,5 +12,8 @@ rootProject.name = "knowthenix-kbd"
 /*
     Композитные сборки
  */
-// includeBuild("lessons")
+//includeBuild("lessons")
 includeBuild("knowthenix-be")
+includeBuild("knowthenix-libs")
+
+includeBuild("knowthenix-tests")

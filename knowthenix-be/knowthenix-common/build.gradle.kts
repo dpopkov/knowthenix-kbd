@@ -12,6 +12,7 @@ kotlin {
                 implementation(kotlin("stdlib-common"))
 
                 api(libs.kotlinx.datetime)
+                api("io.dpopkov.knowthenixkbd.libs:knowthenix-lib-logging-common")
             }
         }
         val commonTest by getting {

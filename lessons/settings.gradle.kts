@@ -1,7 +1,9 @@
 pluginManagement {
     plugins {
         val kotlinVersion: String by settings
+        val kotestVersion: String by settings
         kotlin("jvm") version kotlinVersion
+        id("io.kotest.multiplatform") version kotestVersion
     }
 }
 
@@ -19,9 +21,10 @@ include("m1l5-dsl")
 include("m2l1-coroutines")
 include("m2l2-flows")
 include("m2l3-kmp")
-include("m2l4-1-interop")
-include("m2l4-2-jni")
+//include("m2l4-1-interop")
+//include("m2l4-2-jni")
 include("m2l5-gradle")
+include("m4l4-testing")
 
 /*
     Примеры подпроектов (пустые).

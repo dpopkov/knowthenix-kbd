@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/"
+  },
+
+  "response": {
+    "status": 200,
+    "body": "Hello, world of containers!",
+    "headers": {
+      "Content-Type": "text/plain"
+    }
+  }
+}
+

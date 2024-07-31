@@ -31,3 +31,48 @@ Web приложение предоставляет пользователю м�
   * [Упрощенная компонентная схема](docs/architecture/arch.md)
 
 ## Структура проекта
+
+### Плагины
+
+#### Плагины Gradle сборки проекта
+
+1. [build-plugin](build-plugin) Модуль с плагинами
+2. [BuildPluginJvm](build-plugin/src/main/kotlin/BuildPluginJvm.kt) Плагин для сборки проектов JVM
+3. [BuildPluginMultiplarform](build-plugin/src/main/kotlin/BuildPluginMultiplatform.kt) Плагин для сборки
+   мультиплатформенных проектов
+
+### Проектные модули
+
+#### Транспортные модели, API
+
+1. [specs](specs) - описание API в форме OpenAPI-спецификаций
+2. [knowthenix-api-v1-jackson](knowthenix-be/knowthenix-api-v1-jackson) - 1-я версия транспортных модели с Jackson
+3. [knowthenix-api-v1-mappers](knowthenix-be/knowthenix-api-v1-mappers) - Мапперы из API v1 во внутренние модели
+4. [knowthenix-api-v2-kmp](knowthenix-be/knowthenix-api-v2-kmp) - 2-я версия транспортных моделей с KMP
+5. [knowthenix-common](knowthenix-be/knowthenix-common) - модуль с общими классами для всех модулей проекта.
+   Содержит внутренние модели и контекст.
+6. [knowthenix-mappers-log1](knowthenix-be/knowthenix-api-log1) - Модели логирования первой версии и маппер между
+   внутренними моделями и моделями логирования.
+
+#### Фреймворки и транспорты
+1. [knowthenix-app-spring](knowthenix-be/knowthenix-app-spring) - Приложение Spring.
+2. [knowthenix-app-ktor-kmp](knowthenix-be/knowthenix-app-ktor-kmp) - Приложение Ktor на KMP (отключено в settings.gradle.kts).
+3. [knowthenix-app-ktor-jvm](knowthenix-be/knowthenix-app-ktor-jvm) - Приложение Ktor на JVM, 
+   также содержит endpoint на websocket.
+4. [knowthenix-app-kafka](knowthenix-be/knowthenix-app-kafka) - Микросервис на Kafka.
+
+### Библиотеки
+
+#### Мониторинг и логирование
+
+1. [deploy](deploy) - Инструменты мониторинга и деплоя
+2. [knowthenix-lib-logging-common](knowthenix-libs/knowthenix-lib-logging-common) - Общие объявления для логирования
+3. [knowthenix-lib-logging-kermit](knowthenix-libs/knowthenix-lib-logging-kermit) - Логирование на базе Kermit
+4. [knowthenix-lib-logging-logback](knowthenix-libs/knowthenix-lib-logging-logback) - Логирование на базе Logback
+5. [knowthenix-lib-logging-socket](knowthenix-libs/knowthenix-lib-logging-socket) - Логирование на базе протокола TCP socket
+
+### Тестирование
+
+#### Сквозные/интеграционные тесты
+
+1. [knowthenix-e2e-be](knowthenix-tests/knowthenix-e2e-be) - Сквозные/интеграционные тесты для бэкенда
