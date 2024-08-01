@@ -28,6 +28,7 @@ data class KnthContext(
     /** Ошибки добавляемые обработчиками */
     val errors: MutableList<KnthError> = mutableListOf(),
 
+    var corSettings: KnthCorSettings = KnthCorSettings(),
     /** Режим работы приложения для переключения между разными видами запросов */
     var workMode: KnthWorkMode = KnthWorkMode.PROD,
     /** Стаб используемый только в режиме стабов */
@@ -49,4 +50,13 @@ data class KnthContext(
     var translationResponse: KnthTranslation = KnthTranslation(),
     /** Формируемый ответ содержащий список переводов */
     var translationsResponse: MutableList<KnthTranslation> = mutableListOf(),
-)
+) {
+    fun addError(vararg error: KnthError) {
+        this.errors.addAll(error)
+    }
+
+    fun fail(error: KnthError) {
+        addError(error)
+        this.state = KnthState.FAILING
+    }
+}

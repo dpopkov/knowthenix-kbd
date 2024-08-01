@@ -38,9 +38,9 @@ class KafkaControllerMockTest {
             val message: String = apiV1RequestSerialize(
                 TranslationCreateRequest(
                     translation = TranslationCreateObject(
-                        originalId = "any original id",
-                        language = "any lang",
-                        content = "any translation content",
+                        originalId = "original id to create",
+                        language = "lang to create",
+                        content = "translation content to create",
                         syntax = SyntaxType.PLAIN_TEXT,
                         trType = TranslationType.QUESTION,
                         state = TranslationState.NEW,
@@ -78,9 +78,9 @@ class KafkaControllerMockTest {
 
         // Ожидаются данные из стаба
         assertEquals("123", result.translation?.id)
-        assertEquals("123", result.translation?.originalId)
-        assertEquals("en", result.translation?.language)
-        assertEquals("translation content", result.translation?.content)
+        assertEquals("original id to create", result.translation?.originalId)
+        assertEquals("lang to create", result.translation?.language)
+        assertEquals("translation content to create", result.translation?.content)
         assertEquals("user-1", result.translation?.ownerId)
     }
 

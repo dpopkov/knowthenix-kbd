@@ -10,6 +10,8 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-common"))
 
+                implementation(libs.cor)
+
                 implementation(project(":knowthenix-common"))
                 implementation(project(":knowthenix-stubs"))
             }
