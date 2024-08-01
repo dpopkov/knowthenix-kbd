@@ -27,11 +27,17 @@ kotlin {
         jvmMain {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
+                implementation("io.dpopkov.knowthenixkbd.libs:knowthenix-lib-logging-logback")
             }
         }
         jvmTest {
             dependencies {
                 implementation(kotlin("test-junit"))
+            }
+        }
+        nativeMain {
+            dependencies {
+                implementation("io.dpopkov.knowthenixkbd.libs:knowthenix-lib-logging-kermit")
             }
         }
     }

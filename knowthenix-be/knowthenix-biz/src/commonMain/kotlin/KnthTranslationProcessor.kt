@@ -1,5 +1,6 @@
 package io.dpopkov.knowthenixkbd.biz
 
+import io.dpopkov.knowthenixkbd.biz.plugins.getLoggerProviderConf
 import io.dpopkov.knowthenixkbd.biz.stubs.*
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.KnthCorSettings
@@ -8,7 +9,9 @@ import io.dpopkov.knowthenixkbd.cor.ICorExec
 import io.dpopkov.knowthenixkbd.cor.dsl.rootChain
 
 class KnthTranslationProcessor(
-    val corSettings: KnthCorSettings = KnthCorSettings.NONE
+    val corSettings: KnthCorSettings = KnthCorSettings(
+        loggerProvider = getLoggerProviderConf(),
+    )
 ) {
     suspend fun exec(ctx: KnthContext) {
         businessChain.exec(

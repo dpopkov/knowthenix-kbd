@@ -5,6 +5,11 @@ import io.dpopkov.knowthenixkbd.common.models.KnthError
 import io.dpopkov.knowthenixkbd.common.models.KnthState
 import io.dpopkov.knowthenixkbd.cor.dsl.CorChainBuilder
 
+/**
+ * Проверяет случай, если ни одна проверка до него не сработала и state контекста так и остался running.
+ * Поэтому всегда должен находиться в конце цепочки обработки стабов.
+ * По смыслу аналогичен блоку else.
+ */
 fun CorChainBuilder<KnthContext>.stubNoCase(title: String) = worker {
     this.title = title
     this.description = "Валидация ситуации, когда запрошен кейс, неподдерживаемый в обработке стабов"
