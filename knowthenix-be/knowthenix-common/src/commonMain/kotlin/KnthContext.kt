@@ -46,12 +46,22 @@ data class KnthContext(
     /** Критерии фильтрации переводов  */
     var translationFilterRequest: KnthTranslationFilter = KnthTranslationFilter(),
 
+    /** Промежуточная копия запроса для текущих проверок во время валидации */
+    var translationValidating: KnthTranslation = KnthTranslation(),
+    /** Промежуточная копия критериев фильтрации для текущих проверок во время валидации */
+    var translationFilterValidating: KnthTranslationFilter = KnthTranslationFilter(),
+
+    /** Провалидированная копия запроса, либо пустой объект, если валидация не пройдена */
+    var translationValidated: KnthTranslation = KnthTranslation(),
+    /** Провалидированная копия критериев фильтрации, либо пустой фильтр, если валидация не пройдена */
+    var translationFilterValidated: KnthTranslationFilter = KnthTranslationFilter(),
+
     /** Формируемый ответ содержащий единичный перевод */
     var translationResponse: KnthTranslation = KnthTranslation(),
     /** Формируемый ответ содержащий список переводов */
     var translationsResponse: MutableList<KnthTranslation> = mutableListOf(),
 ) {
-    fun addError(vararg error: KnthError) {
+    private fun addError(vararg error: KnthError) {
         this.errors.addAll(error)
     }
 

@@ -19,6 +19,9 @@ fun CorChainBuilder<KnthContext>.initStatus(title: String) = worker {
     }
 }
 
+/**
+ * Группирование цепочек и обработчиков производящих одну основную бизнес операцию.
+ */
 fun CorChainBuilder<KnthContext>.operation(
     title: String,
     command: KnthCommand,
@@ -31,6 +34,9 @@ fun CorChainBuilder<KnthContext>.operation(
     }
 }
 
+/**
+ * Цепочка обработчиков производящих обработку стабов.
+ */
 fun CorChainBuilder<KnthContext>.stubs(
     title: String,
     block: CorChainBuilder<KnthContext>.() -> Unit
@@ -39,5 +45,31 @@ fun CorChainBuilder<KnthContext>.stubs(
     this.title = title
     on {
         this.workMode == KnthWorkMode.STUB && this.state == KnthState.RUNNING
+    }
+}
+
+/**
+ * Цепочка обработчиков производящих логическую валидацию.
+ */
+fun CorChainBuilder<KnthContext>.validation(
+    block: CorChainBuilder<KnthContext>.() -> Unit
+) = chain {
+    block()
+    this.title = "Валидация"
+    on {
+        this.state == KnthState.RUNNING
+    }
+}
+
+/**
+ * Worker с дополнительным параметром [title] - наименование.
+ */
+fun CorChainBuilder<KnthContext>.worker(
+    title: String,
+    block: KnthContext.() -> Unit
+) {
+    worker {
+        this.title = title
+        handle(block)
     }
 }

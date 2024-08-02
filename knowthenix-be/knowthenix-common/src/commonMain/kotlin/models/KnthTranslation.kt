@@ -14,6 +14,9 @@ data class KnthTranslation(
     var lock: KnthTranslationLock = KnthTranslationLock.NONE,
     val permissionsClient: MutableSet<KnthTranslationPermissionClient> = mutableSetOf(),
 ) {
+    fun deepCopy(): KnthTranslation = copy(
+        permissionsClient = permissionsClient.toMutableSet()  // создает новый set
+    )
     fun isEmpty(): Boolean = this == NONE
 
     fun isNotEmpty(): Boolean = this != NONE
