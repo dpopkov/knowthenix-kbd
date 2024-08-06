@@ -104,7 +104,7 @@
     <!--        </if>-->
     <!--    </appender>-->
 
-    <logger name="ru.otus" level="${LOG_KNTH_LEVEL}" additivity="false">
+    <logger name="io.dpopkov.knowthenixkbd" level="${LOG_KNTH_LEVEL}" additivity="false">
         <appender-ref ref="fluentd"/>
         <!--        <appender-ref ref="asyncMyLogKafka"/>-->
         <appender-ref ref="STDOUT"/>
