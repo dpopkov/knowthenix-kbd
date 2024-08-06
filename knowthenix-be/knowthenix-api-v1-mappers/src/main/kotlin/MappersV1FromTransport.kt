@@ -115,7 +115,8 @@ private fun TranslationDeleteObject?.toInternal(): KnthTranslation = if (this !=
 }
 
 private fun TranslationSearchFilter?.toInternal() = KnthTranslationFilter(
-    searchString = this?.searchString ?: ""
+    searchString = this?.searchString ?: "",
+    ownerId = this?.ownerId?.let { KnthUserId(it) } ?: KnthUserId.NONE
 )
 
 private fun SyntaxType?.fromTransport(): KnthSyntaxType = when (this) {

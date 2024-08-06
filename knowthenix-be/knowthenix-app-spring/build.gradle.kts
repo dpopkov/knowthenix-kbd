@@ -35,13 +35,17 @@ dependencies {
     // biz
     implementation(project(":knowthenix-biz"))
 
+    // DB
+    implementation(projects.knowthenixRepoStubs)
+    implementation(projects.knowthenixRepoInmemory)
+    testImplementation(projects.knowthenixRepoCommon)
+    testImplementation(projects.knowthenixStubs)
+
     // tests
     testImplementation(kotlin("test-junit5"))
     testImplementation(libs.spring.test)
     testImplementation(libs.mockito.kotlin)
-
-    // stubs
-    testImplementation(project(":knowthenix-stubs"))
+    testImplementation(libs.spring.mockk)
 }
 
 tasks {

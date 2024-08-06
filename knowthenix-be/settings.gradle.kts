@@ -43,3 +43,9 @@ include(":knowthenix-app-spring")
 //include(":knowthenix-app-ktor-kmp")
 include(":knowthenix-app-ktor-jvm")
 include(":knowthenix-app-kafka")
+
+// DB
+include(":knowthenix-repo-common")
+include(":knowthenix-repo-inmemory")
+include(":knowthenix-repo-stubs")
+include(":knowthenix-repo-tests")

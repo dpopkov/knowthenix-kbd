@@ -95,14 +95,14 @@ private fun List<KnthTranslation>.toTransport(): List<TranslationResponseObject>
     .map { it.toTransport() }
     .takeIf { it.isNotEmpty()}
 
-private fun KnthSyntaxType.toTransport(): SyntaxType? = when(this) {
+internal fun KnthSyntaxType.toTransport(): SyntaxType? = when(this) {
     KnthSyntaxType.PLAIN_TEXT -> SyntaxType.PLAIN_TEXT
     KnthSyntaxType.MARKDOWN -> SyntaxType.MARKDOWN
     KnthSyntaxType.HTML -> SyntaxType.HTML
     KnthSyntaxType.NONE -> null
 }
 
-private fun KnthTranslationType.toTransport(): TranslationType? = when(this) {
+internal fun KnthTranslationType.toTransport(): TranslationType? = when(this) {
     KnthTranslationType.QUESTION -> TranslationType.QUESTION
     KnthTranslationType.ANSWER -> TranslationType.ANSWER
     KnthTranslationType.ARTICLE -> TranslationType.ARTICLE
@@ -110,7 +110,7 @@ private fun KnthTranslationType.toTransport(): TranslationType? = when(this) {
     KnthTranslationType.NONE -> null
 }
 
-private fun KnthTranslationState.toTransport(): TranslationState? = when(this) {
+internal fun KnthTranslationState.toTransport(): TranslationState? = when(this) {
     KnthTranslationState.NEW -> TranslationState.NEW
     KnthTranslationState.EDITED -> TranslationState.EDITED
     KnthTranslationState.TO_VERIFY -> TranslationState.TO_VERIFY
@@ -118,7 +118,7 @@ private fun KnthTranslationState.toTransport(): TranslationState? = when(this) {
     KnthTranslationState.NONE -> null
 }
 
-private fun KnthVisibility.toTransport(): TranslationVisibility? = when(this) {
+internal fun KnthVisibility.toTransport(): TranslationVisibility? = when(this) {
     KnthVisibility.VISIBLE_PUBLIC -> TranslationVisibility.PUBLIC
     KnthVisibility.VISIBLE_TO_REGISTERED_ONLY -> TranslationVisibility.REGISTERED_ONLY
     KnthVisibility.VISIBLE_TO_OWNER -> TranslationVisibility.AUTHOR_ONLY

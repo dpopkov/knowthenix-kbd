@@ -15,6 +15,7 @@ object KnthTranslationStubItems {
             aggregateId = KnthAggregateId("12"),
             ownerId = KnthUserId("user-1"),
             visibility = KnthVisibility.VISIBLE_PUBLIC,
+            lock = KnthTranslationLock("stub-lock-123"),
             permissionsClient = mutableSetOf(
                 KnthTranslationPermissionClient.READ,
                 KnthTranslationPermissionClient.UPDATE,
