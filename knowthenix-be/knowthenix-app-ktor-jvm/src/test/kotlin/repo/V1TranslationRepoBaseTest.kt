@@ -93,6 +93,7 @@ abstract class V1TranslationRepoBaseTest {
             assertEquals(translation.language, responseObj.translation?.language)
             assertEquals(translation.content, responseObj.translation?.content)
             assertEquals(translation.visibility, responseObj.translation?.visibility)
+            assertEquals(uuidNew, responseObj.translation?.lock)
         }
     }
 

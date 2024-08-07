@@ -3,8 +3,10 @@ package io.dpopkov.knowthenixkbd.repo.inmemory
 import com.benasher44.uuid.uuid4
 import io.dpopkov.knowthenixkbd.common.models.KnthTranslation
 import io.dpopkov.knowthenixkbd.common.models.KnthTranslationId
+import io.dpopkov.knowthenixkbd.common.models.KnthTranslationLock
 import io.dpopkov.knowthenixkbd.common.models.KnthUserId
 import io.dpopkov.knowthenixkbd.common.repo.*
+import io.dpopkov.knowthenixkbd.common.repo.exceptions.RepoEmptyLockException
 import io.dpopkov.knowthenixkbd.repo.common.IRepoTranslationInitializable
 import io.github.reactivecircus.cache4k.Cache
 import kotlinx.coroutines.sync.Mutex
@@ -43,7 +45,10 @@ class TranslationRepoInMemory(
     override suspend fun createTranslation(req: DbTranslationRequest): IDbTranslationResponse {
         return tryTranslationMethod {
             val key = randomUuid()
-            val tr = req.translation.copy(id = KnthTranslationId(key))
+            val tr = req.translation.copy(
+                id = KnthTranslationId(key),
+                lock = KnthTranslationLock(randomUuid()),
+            )
             val entity = TranslationEntity(tr)
             mutex.withLock {
                 cache.put(key, entity)
@@ -72,13 +77,22 @@ class TranslationRepoInMemory(
             val id = reqTr.id.takeIf { it != KnthTranslationId.NONE }
                 ?: return@tryTranslationMethod errorEmptyId
             val key = id.asString()
+            val reqLock = reqTr.lock.takeIf { it.isNotNone() }
+                ?: return@tryTranslationMethod errorEmptyLock(id)
 
             mutex.withLock {
                 val oldTr = cache.get(key)?.toInternal()
                 when {
                     oldTr == null -> errorNotFound(id)
+                    oldTr.lock.isNone() -> errorDb(RepoEmptyLockException(id))
+                    oldTr.lock != reqLock -> errorRepoConcurrency(
+                        oldTranslation = oldTr,
+                        expectedLock = reqLock,
+                    )
+
                     else -> {
-                        val newTr = reqTr.copy()
+                        val newLockForUpdatedEntity = KnthTranslationLock(randomUuid())
+                        val newTr = reqTr.copy(lock = newLockForUpdatedEntity)
                         val entity = TranslationEntity(newTr)
                         cache.put(key, entity)
                         DbTranslationResponseOk(newTr)
@@ -93,11 +107,18 @@ class TranslationRepoInMemory(
             val id = req.id.takeIf { it != KnthTranslationId.NONE }
                 ?: return@tryTranslationMethod errorEmptyId
             val key = id.asString()
+            val reqLock = req.lock.takeIf { it.isNotNone() }
+                ?: return@tryTranslationMethod errorEmptyLock(id)
 
             mutex.withLock {
                 val oldTr = cache.get(key)?.toInternal()
                 when {
                     oldTr == null -> errorNotFound(id)
+                    oldTr.lock.isNone() -> errorDb(RepoEmptyLockException(id))
+                    oldTr.lock != reqLock -> errorRepoConcurrency(
+                        oldTranslation = oldTr,
+                        expectedLock = reqLock,
+                    )
                     else -> {
                         cache.invalidate(key)
                         DbTranslationResponseOk(oldTr)

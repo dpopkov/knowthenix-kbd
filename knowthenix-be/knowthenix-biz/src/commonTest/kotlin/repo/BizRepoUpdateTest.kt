@@ -19,6 +19,7 @@ class BizRepoUpdateTest {
         content = "abc",
         ownerId = userId,
         visibility = KnthVisibility.VISIBLE_PUBLIC,
+        lock = KnthTranslationLock("old-lock-123")
     )
     private val repo = TranslationRepositoryMock(
         invokeReadTranslation = {
@@ -31,6 +32,7 @@ class BizRepoUpdateTest {
                     language = "ru",
                     content = "xyz",
                     visibility = KnthVisibility.VISIBLE_TO_OWNER,
+                    lock = KnthTranslationLock("old-lock-123")
                 )
             )
         }
@@ -45,7 +47,7 @@ class BizRepoUpdateTest {
             language = "ru",
             content = "xyz",
             visibility = KnthVisibility.VISIBLE_TO_OWNER,
-            lock = KnthTranslationLock("123")
+            lock = KnthTranslationLock("old-lock-123")
         )
         val ctx = KnthContext(
             command = command,

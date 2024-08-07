@@ -21,6 +21,7 @@ class BizRepoDeleteTest {
         content = "abc",
         ownerId = userId,
         visibility = KnthVisibility.VISIBLE_PUBLIC,
+        lock = KnthTranslationLock("old-lock-123"),
     )
 
     private val repo = TranslationRepositoryMock(
@@ -42,7 +43,7 @@ class BizRepoDeleteTest {
     fun repoDeleteSuccessTest() = runTest {
         val translationToDelete = KnthTranslation(
             id = KnthTranslationId("id-to-delete-123"),
-            lock = KnthTranslationLock("lock-123")
+            lock = KnthTranslationLock("old-lock-123"),
         )
         val ctx = KnthContext(
             command = command,
@@ -60,4 +61,7 @@ class BizRepoDeleteTest {
         assertEquals(initTranslation.content, ctx.translationResponse.content)
         assertEquals(initTranslation.visibility, ctx.translationResponse.visibility)
     }
+
+    @Test
+    fun repoDeleteNotFoundTest() = repoNotFoundTest(command)
 }

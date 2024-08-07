@@ -88,6 +88,7 @@ private fun KnthTranslation.toTransport(): TranslationResponseObject = Translati
     state = this.state.toTransport(),
     visibility = visibility.toTransport(),
     ownerId = ownerId.takeIf { it != KnthUserId.NONE }?.asString(),
+    lock = lock.takeIf { it != KnthTranslationLock.NONE }?.asString(),
     permissions = permissionsClient.toTransport(),
 )
 

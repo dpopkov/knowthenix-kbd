@@ -16,6 +16,7 @@ private val initTranslation = KnthTranslation(
     language = "en",
     content = "abc",
     visibility = KnthVisibility.VISIBLE_PUBLIC,
+    lock = KnthTranslationLock("old-lock-123"),
 )
 private val repo = TranslationRepositoryMock(
     invokeReadTranslation = {
@@ -39,7 +40,7 @@ fun repoNotFoundTest(command: KnthCommand) = runTest {
             language = "en",
             content = "abc",
             visibility = KnthVisibility.VISIBLE_PUBLIC,
-            lock = KnthTranslationLock("123"),
+            lock = KnthTranslationLock("old-lock-123"),
         ),
     )
 

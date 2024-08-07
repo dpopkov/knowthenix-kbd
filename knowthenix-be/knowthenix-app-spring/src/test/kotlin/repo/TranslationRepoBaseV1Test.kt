@@ -27,7 +27,7 @@ internal abstract class TranslationRepoBaseV1Test {
             KnthTranslationStub.prepareResult {
                 id = KnthTranslationId(uuidNew)
                 ownerId = KnthUserId.NONE
-                lock = KnthTranslationLock.NONE
+                lock = KnthTranslationLock(uuidNew)
             }
         ).toTransportCreate()
             .copy(responseType = "create")
@@ -56,6 +56,7 @@ internal abstract class TranslationRepoBaseV1Test {
         expectObj = prepareCtx(
             KnthTranslationStub.prepareResult {
                 content = "update content"
+                lock = KnthTranslationLock(uuidNew)
             }
         ).toTransportUpdate()
             .copy(responseType = "update")

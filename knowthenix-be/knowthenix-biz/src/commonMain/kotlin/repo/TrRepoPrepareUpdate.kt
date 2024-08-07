@@ -21,6 +21,7 @@ fun CorChainBuilder<KnthContext>.repoPrepareUpdate(title: String) = worker {
             this.state = translationValidated.state
             this.aggregateId = translationValidated.aggregateId
             this.visibility = translationValidated.visibility
+            this.lock = translationValidated.lock
         }
     }
 }

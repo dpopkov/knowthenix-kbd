@@ -19,7 +19,7 @@ class TranslationRepoInMemoryReadTest : RepoTranslationReadTest() {
 
 class TranslationRepoInMemoryUpdateTest : RepoTranslationUpdateTest() {
     override val repo = TranslationRepoInitialized(
-        repo = TranslationRepoInMemory(),
+        repo = TranslationRepoInMemory(randomUuid = { lockNew.asString() }),
         initObjects = Companion.initObjects
     )
 }

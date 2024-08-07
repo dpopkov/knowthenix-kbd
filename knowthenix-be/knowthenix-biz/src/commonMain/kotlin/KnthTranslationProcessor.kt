@@ -110,6 +110,7 @@ class KnthTranslationProcessor(
             chain {
                 title = "Логика изменения перевода"
                 repoRead("Чтение перевода из БД")
+                checkLock("Проверяем консистентность по оптимистичной блокировке")
                 repoPrepareUpdate("Подготовка перевода для изменения")
                 repoUpdate("Обновление перевода в БД")
             }
@@ -136,6 +137,7 @@ class KnthTranslationProcessor(
             chain {
                 title = "Логика удаления"
                 repoRead("Чтение перевода из БД")
+                checkLock("Проверяем консистентность по оптимистичной блокировке")
                 repoPrepareDelete("Подготовка перевода для удаления")
                 repoDelete("Удаление перевода из БД")
             }

@@ -2,11 +2,9 @@ package io.dpopkov.knowthenixkbd.repo.tests
 
 import io.dpopkov.knowthenixkbd.common.models.KnthTranslation
 import io.dpopkov.knowthenixkbd.common.models.KnthTranslationId
+import io.dpopkov.knowthenixkbd.common.models.KnthTranslationLock
 import io.dpopkov.knowthenixkbd.common.models.KnthUserId
-import io.dpopkov.knowthenixkbd.common.repo.DbTranslationRequest
-import io.dpopkov.knowthenixkbd.common.repo.DbTranslationResponseErr
-import io.dpopkov.knowthenixkbd.common.repo.DbTranslationResponseOk
-import io.dpopkov.knowthenixkbd.common.repo.IDbTranslationResponse
+import io.dpopkov.knowthenixkbd.common.repo.*
 import io.dpopkov.knowthenixkbd.repo.common.IRepoTranslationInitializable
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,13 +14,16 @@ abstract class RepoTranslationUpdateTest {
     abstract val repo: IRepoTranslationInitializable
 
     private val updateSuccessObj: KnthTranslation = initObjects[0]
+    private val updateConcObj: KnthTranslation = initObjects[1]
     private val updateIdNotFound = KnthTranslationId("translation-repo-update-not-found")
+    protected val lockNew = KnthTranslationLock("20000000-0000-0000-0000-000000000002")
 
     private val reqUpdateSuccess = KnthTranslation(
         id = updateSuccessObj.id,
         language = "en",
         content = "update translation content",
         ownerId = KnthUserId("test-owner-123"),
+        lock = initObjects.first().lock,
     )
 
     private val reqUpdateNotFound = KnthTranslation(
@@ -30,6 +31,15 @@ abstract class RepoTranslationUpdateTest {
         language = "en not found",
         content = "update translation content not found",
         ownerId = KnthUserId("test-owner-123"),
+        lock = initObjects.first().lock,
+    )
+
+    private val reqUpdateConc = KnthTranslation(
+        id = updateConcObj.id,
+        language = "en",
+        content = "update translation content",
+        ownerId = KnthUserId("test-owner-123"),
+        lock = lockBad,
     )
 
     @Test
@@ -41,6 +51,7 @@ abstract class RepoTranslationUpdateTest {
         assertEquals(expected.id, result.data.id)
         assertEquals(expected.language, result.data.language)
         assertEquals(expected.content, result.data.content)
+        assertEquals(lockNew, result.data.lock)
     }
 
     @Test
@@ -52,9 +63,20 @@ abstract class RepoTranslationUpdateTest {
         assertEquals("id", error?.field)
     }
 
+    @Test
+    fun updateConcurrencyError() = runRepoTest {
+        val result = repo.updateTranslation(DbTranslationRequest(reqUpdateConc))
+
+        assertIs<DbTranslationResponseErrWithData>(result)
+        val error = result.errors.find { it.code == "repo-concurrency" }
+        assertEquals("lock", error?.field)
+        assertEquals(updateConcObj, result.data)
+    }
+
     companion object : BaseInitTranslations("update") {
         override val initObjects: List<KnthTranslation> = listOf(
-            createInitTestModel("update")
+            createInitTestModel("update"),
+            createInitTestModel("updateConc"),
         )
     }
 }
