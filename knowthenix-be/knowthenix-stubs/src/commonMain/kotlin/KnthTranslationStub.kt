@@ -7,6 +7,9 @@ import io.dpopkov.knowthenixkbd.stubs.KnthTranslationStubItems.TRANSLATION_EN
 object KnthTranslationStub {
     fun get(): KnthTranslation = TRANSLATION_EN.copy()
 
+    fun prepareResult(preparingBlock: KnthTranslation.() -> Unit): KnthTranslation =
+        get().apply(preparingBlock)
+
     fun prepareSearchList(filter: String) = listOf(
         translationEn("tr-123-45", filter),
         translationEn("tr-123-46", filter),

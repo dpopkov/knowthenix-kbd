@@ -28,7 +28,7 @@ class V2TranslationStubApiTest {
                 syntax = SyntaxType.PLAIN_TEXT,
                 trType = TranslationType.QUESTION,
                 state = TranslationState.NEW,
-                aggregateId = "any aggregate id",
+                aggregateId = "aggregate id to create",
                 visibility = TranslationVisibility.PUBLIC,
             ),
             debug = TranslationDebug(
@@ -40,7 +40,7 @@ class V2TranslationStubApiTest {
         val responseObj = response.body<TranslationCreateResponse>()
         assertEquals(200, response.status.value)
         assertEquals("123", responseObj.translation?.id)
-        assertEquals("12", responseObj.translation?.aggregateId)
+        assertEquals("aggregate id to create", responseObj.translation?.aggregateId)
         assertEquals("user-1", responseObj.translation?.ownerId)
     }
 
@@ -48,7 +48,7 @@ class V2TranslationStubApiTest {
     fun read() = v2TestApplication(
         func = "read",
         request = TranslationReadRequest(
-            translation = TranslationReadObject("any id"),
+            translation = TranslationReadObject("id to read"),
             debug = TranslationDebug(
                 mode = TranslationRequestDebugMode.STUB,
                 stub = TranslationRequestDebugStubs.SUCCESS
@@ -57,7 +57,7 @@ class V2TranslationStubApiTest {
     ) { response ->
         val responseObj = response.body<TranslationReadResponse>()
         assertEquals(200, response.status.value)
-        assertEquals("123", responseObj.translation?.id)
+        assertEquals("id to read", responseObj.translation?.id)
         assertEquals("12", responseObj.translation?.aggregateId)
         assertEquals("user-1", responseObj.translation?.ownerId)
     }
@@ -67,13 +67,14 @@ class V2TranslationStubApiTest {
         func = "update",
         request = TranslationUpdateRequest(
             translation = TranslationUpdateObject(
+                id = "id to update",
                 originalId = "any original id",
                 language = "any lang",
                 content = "any translation content",
                 syntax = SyntaxType.PLAIN_TEXT,
                 trType = TranslationType.QUESTION,
                 state = TranslationState.NEW,
-                aggregateId = "any aggregate id",
+                aggregateId = "aggregate id to update",
                 visibility = TranslationVisibility.PUBLIC,
             ),
             debug = TranslationDebug(
@@ -84,8 +85,8 @@ class V2TranslationStubApiTest {
     ) { response ->
         val responseObj = response.body<TranslationUpdateResponse>()
         assertEquals(200, response.status.value)
-        assertEquals("123", responseObj.translation?.id)
-        assertEquals("12", responseObj.translation?.aggregateId)
+        assertEquals("id to update", responseObj.translation?.id)
+        assertEquals("aggregate id to update", responseObj.translation?.aggregateId)
         assertEquals("user-1", responseObj.translation?.ownerId)
     }
 
@@ -94,7 +95,7 @@ class V2TranslationStubApiTest {
         func = "delete",
         request = TranslationDeleteRequest(
             translation = TranslationDeleteObject(
-                id = "any id",
+                id = "id to delete",
                 lock = "123"
             ),
             debug = TranslationDebug(
@@ -104,7 +105,7 @@ class V2TranslationStubApiTest {
         ),
     ) { response ->
         val responseObj = response.body<TranslationDeleteResponse>()
-        assertEquals("123", responseObj.translation?.id)
+        assertEquals("id to delete", responseObj.translation?.id)
         assertEquals("12", responseObj.translation?.aggregateId)
         assertEquals("user-1", responseObj.translation?.ownerId)
     }

@@ -46,7 +46,7 @@ class V1TranslationStubApiTest {
     fun read() = v1TestApplication(
         func = "read",
         request = TranslationReadRequest(
-            translation = TranslationReadObject("any id"),
+            translation = TranslationReadObject("id to read"),
             debug = TranslationDebug(
                 mode = TranslationRequestDebugMode.STUB,
                 stub = TranslationRequestDebugStubs.SUCCESS
@@ -55,7 +55,7 @@ class V1TranslationStubApiTest {
     ) { response ->
         val responseObj = response.body<TranslationReadResponse>()
         assertEquals(200, response.status.value)
-        assertEquals("123", responseObj.translation?.id)
+        assertEquals("id to read", responseObj.translation?.id)
         assertEquals("user-1", responseObj.translation?.ownerId)
     }
 
@@ -64,6 +64,7 @@ class V1TranslationStubApiTest {
         func = "update",
         request = TranslationUpdateRequest(
             translation = TranslationUpdateObject(
+                id = "id to update",
                 originalId = "any original id",
                 language = "any lang",
                 content = "any translation content",
@@ -80,7 +81,7 @@ class V1TranslationStubApiTest {
     ) { response ->
         val responseObj = response.body<TranslationUpdateResponse>()
         assertEquals(200, response.status.value)
-        assertEquals("123", responseObj.translation?.id)
+        assertEquals("id to update", responseObj.translation?.id)
         assertEquals("user-1", responseObj.translation?.ownerId)
     }
 
@@ -89,7 +90,7 @@ class V1TranslationStubApiTest {
         func = "delete",
         request = TranslationDeleteRequest(
             translation = TranslationDeleteObject(
-                id = "any id",
+                id = "id to delete",
                 lock = "123"
             ),
             debug = TranslationDebug(
@@ -99,7 +100,7 @@ class V1TranslationStubApiTest {
         ),
     ) { response ->
         val responseObj = response.body<TranslationDeleteResponse>()
-        assertEquals("123", responseObj.translation?.id)
+        assertEquals("id to delete", responseObj.translation?.id)
         assertEquals("user-1", responseObj.translation?.ownerId)
     }
 
@@ -125,7 +126,7 @@ class V1TranslationStubApiTest {
         func: String,
         request: T,
         crossinline function: suspend (HttpResponse) -> Unit,
-    ): Unit {
+    ) {
         testApplication {
             application {
                 //            module()    // настройки по умолчанию включают Logback логирование
