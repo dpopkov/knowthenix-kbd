@@ -1,9 +1,6 @@
 package io.dpopkov.knowthenixkbd.repo.tests
 
-import io.dpopkov.knowthenixkbd.common.models.KnthTranslation
-import io.dpopkov.knowthenixkbd.common.models.KnthTranslationId
-import io.dpopkov.knowthenixkbd.common.models.KnthTranslationLock
-import io.dpopkov.knowthenixkbd.common.models.KnthUserId
+import io.dpopkov.knowthenixkbd.common.models.*
 import io.dpopkov.knowthenixkbd.common.repo.*
 import io.dpopkov.knowthenixkbd.repo.common.IRepoTranslationInitializable
 import kotlin.test.Test
@@ -22,7 +19,11 @@ abstract class RepoTranslationUpdateTest {
         id = updateSuccessObj.id,
         language = "en",
         content = "update translation content",
+        syntax = KnthSyntaxType.PLAIN_TEXT,
+        type = KnthTranslationType.QUESTION,
+        state = KnthTranslationState.NEW,
         ownerId = KnthUserId("test-owner-123"),
+        visibility = KnthVisibility.VISIBLE_PUBLIC,
         lock = initObjects.first().lock,
     )
 
@@ -30,6 +31,9 @@ abstract class RepoTranslationUpdateTest {
         id = updateIdNotFound,
         language = "en not found",
         content = "update translation content not found",
+        syntax = KnthSyntaxType.PLAIN_TEXT,
+        type = KnthTranslationType.QUESTION,
+        state = KnthTranslationState.NEW,
         ownerId = KnthUserId("test-owner-123"),
         lock = initObjects.first().lock,
     )
@@ -38,6 +42,9 @@ abstract class RepoTranslationUpdateTest {
         id = updateConcObj.id,
         language = "en",
         content = "update translation content",
+        syntax = KnthSyntaxType.PLAIN_TEXT,
+        type = KnthTranslationType.QUESTION,
+        state = KnthTranslationState.NEW,
         ownerId = KnthUserId("test-owner-123"),
         lock = lockBad,
     )

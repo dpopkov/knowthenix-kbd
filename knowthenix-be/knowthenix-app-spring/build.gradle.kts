@@ -38,6 +38,7 @@ dependencies {
     // DB
     implementation(projects.knowthenixRepoStubs)
     implementation(projects.knowthenixRepoInmemory)
+    implementation(projects.knowthenixRepoPostgres)
     testImplementation(projects.knowthenixRepoCommon)
     testImplementation(projects.knowthenixStubs)
 

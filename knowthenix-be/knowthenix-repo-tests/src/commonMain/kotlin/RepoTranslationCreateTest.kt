@@ -1,9 +1,6 @@
 package io.dpopkov.knowthenixkbd.repo.tests
 
-import io.dpopkov.knowthenixkbd.common.models.KnthTranslation
-import io.dpopkov.knowthenixkbd.common.models.KnthTranslationId
-import io.dpopkov.knowthenixkbd.common.models.KnthUserId
-import io.dpopkov.knowthenixkbd.common.models.KnthVisibility
+import io.dpopkov.knowthenixkbd.common.models.*
 import io.dpopkov.knowthenixkbd.common.repo.DbTranslationRequest
 import io.dpopkov.knowthenixkbd.common.repo.DbTranslationResponseOk
 import io.dpopkov.knowthenixkbd.common.repo.IDbTranslationResponse
@@ -20,6 +17,9 @@ abstract class RepoTranslationCreateTest {
     private val createObj = KnthTranslation(
         language = "en",
         content = "create translation content",
+        syntax = KnthSyntaxType.PLAIN_TEXT,
+        type = KnthTranslationType.QUESTION,
+        state = KnthTranslationState.NEW,
         ownerId = KnthUserId("test-owner-123"),
         visibility = KnthVisibility.VISIBLE_PUBLIC,
     )

@@ -15,6 +15,9 @@ abstract class BaseInitTranslations(private val operation: String) : IInitObject
     ) = KnthTranslation(
         id = KnthTranslationId("translation-repo-$operation-$suf"),
         content = "$suf stub content",
+        syntax = KnthSyntaxType.PLAIN_TEXT,
+        type = KnthTranslationType.QUESTION,
+        state = KnthTranslationState.NEW,
         ownerId = ownerId,
         visibility = KnthVisibility.VISIBLE_TO_OWNER,
         lock = lock,

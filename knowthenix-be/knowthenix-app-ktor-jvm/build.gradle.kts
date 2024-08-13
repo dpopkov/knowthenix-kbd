@@ -64,6 +64,7 @@ dependencies {
     // DB
     implementation(projects.knowthenixRepoStubs)
     implementation(projects.knowthenixRepoInmemory)
+    implementation(projects.knowthenixRepoPostgres)
 
     // Logging API
     implementation(projects.knowthenixApiLog1)
