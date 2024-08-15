@@ -1,0 +1,41 @@
+# Конфигурация для Ktor JVM + PostgreSQL
+
+version: '3'
+services:
+  app-ktor-jvm:
+    image: knowthenix-app-ktor-jvm:0.0.1
+    ports:
+      - "8080:8080"
+    environment:
+      DB_TYPE_PROD: "psql"
+      KNTHTRS_HOST: "psql"
+      KNTHTRS_PORT: 5432
+      KNTHTRS_DB: "knowthenixkbd_tr"
+      KNTHTRS_USER: "postgres"
+      KNTHTRS_PASS: "knowthenixkbd-pass"
+    depends_on:
+      psql:
+        condition: service_healthy
+      liquibase:
+        condition: service_completed_successfully
+
+  psql:
+    image: postgres:14.7
+    environment:
+      POSTGRES_PASSWORD: "knowthenixkbd-pass"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "knowthenixkbd_tr"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  liquibase:
+    image: liquibase/liquibase:4.29.1
+    volumes:
+      - ./volumes/liquibase-psql:/liquibase/changelog
+    depends_on:
+      psql:
+        condition: service_healthy
+    command: [ "--defaults-file=/liquibase/changelog/liquibase.properties", "--search-path=/liquibase/changelog", "--url=jdbc:postgresql://psql:5432/knowthenixkbd_tr", "update" ]

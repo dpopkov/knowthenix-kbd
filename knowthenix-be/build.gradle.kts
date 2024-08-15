@@ -36,4 +36,9 @@ tasks {
             })
         }
     }
+
+    create("buildImages") {
+        dependsOn(project("knowthenix-app-spring").tasks.getByName("bootBuildImage"))
+        dependsOn(project("knowthenix-app-ktor-jvm").tasks.getByName("publishImageToLocalRegistry"))
+    }
 }
