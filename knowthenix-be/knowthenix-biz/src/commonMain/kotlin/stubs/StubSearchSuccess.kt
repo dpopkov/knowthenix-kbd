@@ -21,6 +21,7 @@ fun CorChainBuilder<KnthContext>.stubSearchSuccess(title: String, corSettings: K
             level = LogLevel.DEBUG,
         ) {
             this.state = KnthState.FINISHING
+            // В режиме стабов в каждый объект ответа будет вставлена строка поиска
             this.translationsResponse.addAll(
                 KnthTranslationStub.prepareSearchList(this.translationFilterRequest.searchString)
             )

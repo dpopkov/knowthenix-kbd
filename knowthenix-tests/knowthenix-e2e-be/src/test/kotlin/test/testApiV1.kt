@@ -1,5 +1,6 @@
 package io.dpopkov.knowthenixkbd.e2e.be.test
 
+import io.dpopkov.knowthenixkbd.api.v1.models.TranslationResponseObject
 import io.dpopkov.knowthenixkbd.api.v1.models.TranslationSearchFilter
 import io.dpopkov.knowthenixkbd.api.v1.models.TranslationState
 import io.dpopkov.knowthenixkbd.api.v1.models.TranslationUpdateObject
@@ -62,18 +63,18 @@ fun FunSpec.testApiV1(client: Client, prefix: String = "") {
                 content = "translation content"
             ))
             withClue("Search in stubs for now") {
-                val results = client.searchTranslation(
-                    search = TranslationSearchFilter(searchString = "anything but a stub")
+                val results: List<TranslationResponseObject> = client.searchTranslation(
+                    search = TranslationSearchFilter(searchString = "stubbed in e2e")
                 )
                 results shouldHaveSize 3 // это кол-во из стаба
                 results shouldExist {
-                    it.content == "Content: translation search Id: tr-123-45" //created1.content
+                    it.content == "Content: stubbed in e2e Id: tr-123-45" //created1.content
                 }
                 results shouldExist {
-                    it.content == "Content: translation search Id: tr-123-46" //created2.content
+                    it.content == "Content: stubbed in e2e Id: tr-123-46" //created2.content
                 }
                 results shouldExist {
-                    it.content == "Content: translation search Id: tr-123-47"
+                    it.content == "Content: stubbed in e2e Id: tr-123-47"
                 }
             }
         }

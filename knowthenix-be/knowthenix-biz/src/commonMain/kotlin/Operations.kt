@@ -29,6 +29,11 @@ fun CorChainBuilder<KnthContext>.initRepo(title: String, corSettings: KnthCorSet
         description = "Вычисление основного рабочего репозитория в зависимости от запрошенного режима работы"
         handle {
             val logger = corSettings.loggerProvider.logger("initRepo")
+            logger.debug(
+                msg = "Repository initializing in workMode=$workMode",
+                marker = "BIZ",
+                data = workMode,
+            )
             translationRepo = when (workMode) {
                 KnthWorkMode.STUB -> corSettings.repoStub
                 KnthWorkMode.TEST -> corSettings.repoTest
