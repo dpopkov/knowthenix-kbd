@@ -37,3 +37,20 @@ inline fun errorValidation(
     message = "Validation error for field $field: $description",
     level = level,
 )
+
+inline fun errorSystem(
+    /**
+     * Краткий уникальный код, характеризующий тип ошибки валидации.
+     * Должен включать признак нарушения, но не должен включать имя поля источника ошибки
+     * или указание на валидацию.
+     */
+    violationCode: String,
+    level: LogLevel = LogLevel.ERROR,
+    e: Throwable,
+) = KnthError(
+    code = "system-$violationCode",
+    group = "system",
+    message = "System error occurred. Our stuff has been informed, please retry later",
+    level = level,
+    exception = e,
+)

@@ -13,6 +13,10 @@ value class KnthTranslationLock(private val id: String) {
 
     fun isEmpty() = id.isEmpty()
 
+    fun isNone() = this == NONE
+
+    fun isNotNone() = this != NONE
+
     companion object {
         val NONE = KnthTranslationLock("")
     }

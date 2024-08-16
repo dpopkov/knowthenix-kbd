@@ -61,6 +61,16 @@ Web приложение предоставляет пользователю м�
    также содержит endpoint на websocket.
 4. [knowthenix-app-kafka](knowthenix-be/knowthenix-app-kafka) - Микросервис на Kafka.
 
+#### Модули бизнес-логики
+1. [knowthenix-stubs](knowthenix-be/knowthenix-stubs) - Стабы для ответов сервиса.
+2. [knowthenix-lib-cor](knowthenix-libs/knowthenix-lib-cor) - Библиотека CoR (Chain of Responsibility) для бизнес-логики.
+3. [knowthenix-biz](knowthenix-be/knowthenix-biz) - Модуль бизнес-логики приложения: обслуживание стабов, валидация, работа с БД.
+
+#### Хранение, репозитории, базы данных
+1. [knowthenix-repo-tests](knowthenix-be/knowthenix-repo-tests) - Базовые тесты для репозиториев всех баз данных.
+2. [knowthenix-repo-common](knowthenix-be/knowthenix-repo-common) - Модуль с общими классами для всех репозиториев.
+3. [knowthenix-repo-inmemory](knowthenix-be/knowthenix-repo-inmemory) - Репозиторий на базе кэша in-memory для тестирования.
+
 ### Библиотеки
 
 #### Мониторинг и логирование

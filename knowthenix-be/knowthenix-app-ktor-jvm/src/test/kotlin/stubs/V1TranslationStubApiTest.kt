@@ -13,6 +13,7 @@ import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class V1TranslationStubApiTest {
@@ -108,7 +109,9 @@ class V1TranslationStubApiTest {
     fun search() = v1TestApplication(
         func = "search",
         request = TranslationSearchRequest(
-            translationFilter = TranslationSearchFilter(),
+            translationFilter = TranslationSearchFilter(
+                searchString = "stubbed-text",
+            ),
             debug = TranslationDebug(
                 mode = TranslationRequestDebugMode.STUB,
                 stub = TranslationRequestDebugStubs.SUCCESS
@@ -118,8 +121,12 @@ class V1TranslationStubApiTest {
         val responseObj = response.body<TranslationSearchResponse>()
         assertEquals(200, response.status.value)
         assertEquals(3, responseObj.translations?.size)
-        assertEquals("tr-123-45", responseObj.translations?.first()?.id)
-        assertEquals("tr-123-47", responseObj.translations?.last()?.id)
+        val first = responseObj.translations?.first()
+        assertEquals("tr-123-45", first!!.id)
+        assertContains(first.content!!, "stubbed-text")
+        val last = responseObj.translations?.last()
+        assertEquals("tr-123-47", last!!.id)
+        assertContains(last.content!!, "stubbed-text")
     }
 
     private inline fun <reified T: IRequest> v1TestApplication(

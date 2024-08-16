@@ -10,8 +10,11 @@ import io.dpopkov.knowthenixkbd.e2e.be.test.action.beValidId
 import io.dpopkov.knowthenixkbd.e2e.be.test.action.beValidLock
 import io.dpopkov.knowthenixkbd.e2e.be.fixture.client.Client
 
-suspend fun Client.updateTranslation(translation: TranslationUpdateObject): TranslationResponseObject =
-    updateTranslation(translation) {
+suspend fun Client.updateTranslation(
+    translation: TranslationUpdateObject,
+    debug: TranslationDebug,
+): TranslationResponseObject =
+    updateTranslation(translation, debug) {
         it should haveSuccessResult
         it.translation shouldNotBe null
         it.translation?.apply {
@@ -32,7 +35,7 @@ suspend fun Client.updateTranslation(translation: TranslationUpdateObject): Tran
     }
 
 suspend fun <T> Client.updateTranslation(
-    translation: TranslationUpdateObject, block: (TranslationUpdateResponse) -> T
+    translation: TranslationUpdateObject, debug: TranslationDebug, block: (TranslationUpdateResponse) -> T
 ): T {
     val id = translation.id
     val lock = translation.lock

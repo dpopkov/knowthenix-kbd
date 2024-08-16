@@ -8,13 +8,14 @@ import io.dpopkov.knowthenixkbd.api.v1.models.*
 import io.dpopkov.knowthenixkbd.e2e.be.test.action.beValidId
 import io.dpopkov.knowthenixkbd.e2e.be.fixture.client.Client
 
-suspend fun Client.readTranslation(id: String?): TranslationResponseObject = readTranslation(id) {
-    it should haveSuccessResult
-    it.translation shouldNotBe null
-    it.translation!!
-}
+suspend fun Client.readTranslation(id: String?, debug: TranslationDebug): TranslationResponseObject =
+    readTranslation(id, debug) {
+        it should haveSuccessResult
+        it.translation shouldNotBe null
+        it.translation!!
+    }
 
-suspend fun <T> Client.readTranslation(id: String?, block: (TranslationReadResponse) -> T): T =
+suspend fun <T> Client.readTranslation(id: String?, debug: TranslationDebug, block: (TranslationReadResponse) -> T): T =
     withClue("readTranslationV1: $id") {
         id should beValidId
 

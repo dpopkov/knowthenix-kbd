@@ -1,6 +1,7 @@
 package io.dpopkov.knowthenixkbd.common
 
 import io.dpopkov.knowthenixkbd.common.models.*
+import io.dpopkov.knowthenixkbd.common.repo.IRepoTranslation
 import io.dpopkov.knowthenixkbd.common.stubs.KnthStubs
 import io.dpopkov.knowthenixkbd.common.ws.IKnthWsSession
 import kotlinx.datetime.Instant
@@ -56,17 +57,38 @@ data class KnthContext(
     /** Провалидированная копия критериев фильтрации, либо пустой фильтр, если валидация не пройдена */
     var translationFilterValidated: KnthTranslationFilter = KnthTranslationFilter(),
 
+    /** Рабочий репозиторий, инициализируется в зависимости от режима workMode */
+    var translationRepo: IRepoTranslation = IRepoTranslation.NONE,
+    /** То, что прочитали из репозитория */
+    var translationRepoRead: KnthTranslation = KnthTranslation(),
+    /** То, что готовим для сохранения в БД */
+    var translationRepoPrepare: KnthTranslation = KnthTranslation(),
+    /** Результат, полученный из БД */
+    var translationRepoDone: KnthTranslation = KnthTranslation(),
+    /** Результат - список, полученный из БД */
+    var translationsRepoDone: MutableList<KnthTranslation> = mutableListOf(),
+
     /** Формируемый ответ содержащий единичный перевод */
     var translationResponse: KnthTranslation = KnthTranslation(),
     /** Формируемый ответ содержащий список переводов */
     var translationsResponse: MutableList<KnthTranslation> = mutableListOf(),
 ) {
-    private fun addError(vararg error: KnthError) {
-        this.errors.addAll(error)
+
+    private fun addError(error: KnthError) {
+        this.errors.add(error)
+    }
+
+    private fun addErrors(errors: Collection<KnthError>) {
+        this.errors.addAll(errors)
     }
 
     fun fail(error: KnthError) {
         addError(error)
+        this.state = KnthState.FAILING
+    }
+
+    fun fail(errors: Collection<KnthError>) {
+        addErrors(errors)
         this.state = KnthState.FAILING
     }
 }

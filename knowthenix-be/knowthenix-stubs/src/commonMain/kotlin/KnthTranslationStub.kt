@@ -10,6 +10,11 @@ object KnthTranslationStub {
     fun prepareResult(preparingBlock: KnthTranslation.() -> Unit): KnthTranslation =
         get().apply(preparingBlock)
 
+    /**
+     * Готовит стабовый ответ для поиска содержащий 3 перевода, при этом
+     * в содержимое каждого из переводов будет вставлена искомая строка.
+     * Метод должен использоваться для целей тестирования в режиме стабов или мокирования.
+     */
     fun prepareSearchList(filter: String) = listOf(
         translationEn("tr-123-45", filter),
         translationEn("tr-123-46", filter),

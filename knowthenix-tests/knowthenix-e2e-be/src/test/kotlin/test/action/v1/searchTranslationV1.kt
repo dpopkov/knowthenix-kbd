@@ -6,13 +6,20 @@ import io.kotest.matchers.should
 import io.dpopkov.knowthenixkbd.api.v1.models.*
 import io.dpopkov.knowthenixkbd.e2e.be.fixture.client.Client
 
-suspend fun Client.searchTranslation(search: TranslationSearchFilter): List<TranslationResponseObject> =
-    searchTranslation(search) {
+suspend fun Client.searchTranslation(
+    search: TranslationSearchFilter,
+    debug: TranslationDebug,
+): List<TranslationResponseObject> =
+    searchTranslation(search, debug) {
         it should haveSuccessResult
         it.translations ?: listOf()
     }
 
-suspend fun <T> Client.searchTranslation(search: TranslationSearchFilter, block: (TranslationSearchResponse) -> T): T =
+suspend fun <T> Client.searchTranslation(
+    search: TranslationSearchFilter,
+    debug: TranslationDebug,
+    block: (TranslationSearchResponse) -> T
+): T =
     withClue("searchTranslationV1: $search") {
         val response = sendAndReceive(
             "translation/search",

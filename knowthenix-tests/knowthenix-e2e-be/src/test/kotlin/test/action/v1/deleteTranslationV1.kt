@@ -9,7 +9,7 @@ import io.dpopkov.knowthenixkbd.e2e.be.test.action.beValidId
 import io.dpopkov.knowthenixkbd.e2e.be.test.action.beValidLock
 import io.dpopkov.knowthenixkbd.e2e.be.fixture.client.Client
 
-suspend fun Client.deleteTranslation(translation: TranslationResponseObject) {
+suspend fun Client.deleteTranslation(translation: TranslationResponseObject, debug: TranslationDebug) {
     val id = translation.id
     val lock = translation.lock
     withClue("deleteTranslationV2: $id, lock: $lock") {

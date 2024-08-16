@@ -61,6 +61,11 @@ dependencies {
 
     implementation(libs.logback)
 
+    // DB
+    implementation(projects.knowthenixRepoStubs)
+    implementation(projects.knowthenixRepoInmemory)
+    implementation(projects.knowthenixRepoPostgres)
+
     // Logging API
     implementation(projects.knowthenixApiLog1)
     // Библиотеки логирования подключаются как внешние библиотеки
@@ -73,6 +78,9 @@ dependencies {
     testImplementation(kotlin("test-common"))
     testImplementation(kotlin("test-annotations-common"))
     testImplementation(kotlin("test-junit"))
+
+    // DB
+    testImplementation(projects.knowthenixRepoCommon)
 
     testImplementation(libs.ktor.server.test)
     testImplementation(libs.ktor.client.negotiation)

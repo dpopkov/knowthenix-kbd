@@ -1,20 +1,19 @@
 package io.dpopkov.knowthenixkbd.e2e.be.test.action.v1
 
-import io.dpopkov.knowthenixkbd.api.v1.models.TranslationCreateObject
-import io.dpopkov.knowthenixkbd.api.v1.models.TranslationCreateRequest
-import io.dpopkov.knowthenixkbd.api.v1.models.TranslationCreateResponse
-import io.dpopkov.knowthenixkbd.api.v1.models.TranslationResponseObject
+import io.dpopkov.knowthenixkbd.api.v1.models.*
 import io.dpopkov.knowthenixkbd.e2e.be.fixture.client.Client
 import io.kotest.assertions.asClue
 import io.kotest.assertions.withClue
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.shouldMatch
 
 suspend fun Client.createTranslation(
-    reqObj: TranslationCreateObject = someCreateTranslation
+    reqObj: TranslationCreateObject = someCreateTranslation,
+    debug: TranslationDebug,
 ): TranslationResponseObject =
-    createTranslation(reqObj) {
+    createTranslation(reqObj, debug) {
         it should haveSuccessResult
         it.translation shouldNotBe null
         it.translation?.let { resObj ->
@@ -25,12 +24,15 @@ suspend fun Client.createTranslation(
             resObj.trType shouldBe reqObj.trType
             resObj.state shouldBe reqObj.state
             resObj.visibility shouldBe reqObj.visibility
+            resObj.id.toString()shouldMatch expectedIdRegex
+            resObj.lock.toString()shouldMatch expectedIdRegex
         }
         it.translation!!
     }
 
 suspend fun <T> Client.createTranslation(
-    translationObj: TranslationCreateObject = someCreateTranslation,
+    translationObj: TranslationCreateObject,
+    debug: TranslationDebug,
     block: (TranslationCreateResponse) -> T
 ): T = withClue("createTranslationV1: $translationObj") {
     val response = sendAndReceive(

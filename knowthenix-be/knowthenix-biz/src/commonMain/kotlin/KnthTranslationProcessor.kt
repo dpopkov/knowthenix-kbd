@@ -1,11 +1,13 @@
 package io.dpopkov.knowthenixkbd.biz
 
 import io.dpopkov.knowthenixkbd.biz.plugins.getLoggerProviderConf
+import io.dpopkov.knowthenixkbd.biz.repo.*
 import io.dpopkov.knowthenixkbd.biz.stubs.*
 import io.dpopkov.knowthenixkbd.biz.validation.*
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.KnthCorSettings
 import io.dpopkov.knowthenixkbd.common.models.KnthCommand
+import io.dpopkov.knowthenixkbd.common.models.KnthState
 import io.dpopkov.knowthenixkbd.common.models.KnthTranslationId
 import io.dpopkov.knowthenixkbd.cor.ICorExec
 import io.dpopkov.knowthenixkbd.cor.dsl.rootChain
@@ -24,6 +26,7 @@ class KnthTranslationProcessor(
     /** Содержит только вызовы бизнес-процессов */
     private val businessChain: ICorExec<KnthContext> = rootChain {
         initStatus("Инициализация статуса")
+        initRepo("Инициализация репозитория", corSettings)
 
         operation("Создание перевода", KnthCommand.CREATE) {
             stubs("Обработка стабов") {
@@ -45,6 +48,12 @@ class KnthTranslationProcessor(
 
                 finishTranslationValidation("Завершение проверок")
             }
+            chain {
+                title = "Логика сохранения"
+                repoPrepareCreate("Подготовка перевода для сохранения")
+                repoCreate("Создание перевода в БД")
+            }
+            prepareResult("Подготовка ответа")
         }
         operation("Получение перевода", KnthCommand.READ) {
             stubs("Обработка стабов") {
@@ -61,6 +70,16 @@ class KnthTranslationProcessor(
 
                 finishTranslationValidation("Завершение проверок")
             }
+            chain {
+                title = "Логика чтения"
+                repoRead("Чтение перевода из БД")
+                worker {
+                    title = "Подготовка ответа для Read"
+                    on { state == KnthState.RUNNING }
+                    handle { translationRepoDone = translationRepoRead }
+                }
+            }
+            prepareResult("Подготовка ответа")
         }
         operation("Изменить перевод", KnthCommand.UPDATE) {
             stubs("Обработка стабов") {
@@ -88,6 +107,14 @@ class KnthTranslationProcessor(
 
                 finishTranslationValidation("Завершение проверок")
             }
+            chain {
+                title = "Логика изменения перевода"
+                repoRead("Чтение перевода из БД")
+                checkLock("Проверяем консистентность по оптимистичной блокировке")
+                repoPrepareUpdate("Подготовка перевода для изменения")
+                repoUpdate("Обновление перевода в БД")
+            }
+            prepareResult("Подготовка ответа")
         }
         operation("Удалить перевод", KnthCommand.DELETE) {
             stubs("Обработка стабов") {
@@ -107,6 +134,14 @@ class KnthTranslationProcessor(
 
                 finishTranslationValidation("Завершение проверок")
             }
+            chain {
+                title = "Логика удаления"
+                repoRead("Чтение перевода из БД")
+                checkLock("Проверяем консистентность по оптимистичной блокировке")
+                repoPrepareDelete("Подготовка перевода для удаления")
+                repoDelete("Удаление перевода из БД")
+            }
+            prepareResult("Подготовка ответа")
         }
         operation("Поиск переводов", KnthCommand.SEARCH) {
             stubs("Обработка стабов") {
@@ -120,6 +155,8 @@ class KnthTranslationProcessor(
 
                 finishTranslationFilterValidation("Завершение проверок")
             }
+            repoSearch("Поиск переводов в БД по фильтру")
+            prepareResult("Подготовка ответа")
         }
     }.build()
 }

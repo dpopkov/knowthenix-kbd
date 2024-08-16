@@ -3,47 +3,40 @@ package io.dpopkov.knowthenixkbd.biz.validation
 import io.dpopkov.knowthenixkbd.biz.KnthTranslationProcessor
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.models.*
+import io.dpopkov.knowthenixkbd.stubs.KnthTranslationStub
 import kotlinx.coroutines.test.runTest
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-private val goodId = KnthTranslationId("123-234-abc-ABC")
-private val goodLock = KnthTranslationLock("123-234-abc-ABC")
 fun validationLanguageCorrect(command: KnthCommand, processor: KnthTranslationProcessor) = runTest {
     val ctx = KnthContext(
         command = command,
         state = KnthState.NONE,
         workMode = KnthWorkMode.TEST,
-        translationRequest = KnthTranslation(
-            id = goodId,
-            language = "ru",
-            content = "translation content",
-            lock = goodLock,
-        ),
+        translationRequest = KnthTranslationStub.get(),
     )
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
     assertNotEquals(KnthState.FAILING, ctx.state)
-    assertEquals("ru", ctx.translationValidated.language)
+    assertEquals("en", ctx.translationValidated.language)
 }
 
 fun validationLanguageTrim(command: KnthCommand, processor: KnthTranslationProcessor) = runTest {
+    var stubLang = ""
     val ctx = KnthContext(
         command = command,
         state = KnthState.NONE,
         workMode = KnthWorkMode.TEST,
-        translationRequest = KnthTranslation(
-            id = goodId,
-            language = " \n\t ru \t\n ",
-            content = "translation content",
-            lock = goodLock,
-        ),
+        translationRequest = KnthTranslationStub.prepareResult {
+            stubLang = this.language
+            language = " \n\t $stubLang \t\n "
+        },
     )
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
     assertNotEquals(KnthState.FAILING, ctx.state)
-    assertEquals("ru", ctx.translationValidated.language)
+    assertEquals(stubLang, ctx.translationValidated.language)
 }
 
 fun validationLanguageEmpty(command: KnthCommand, processor: KnthTranslationProcessor) = runTest {
@@ -51,12 +44,9 @@ fun validationLanguageEmpty(command: KnthCommand, processor: KnthTranslationProc
         command = command,
         state = KnthState.NONE,
         workMode = KnthWorkMode.TEST,
-        translationRequest = KnthTranslation(
-            id = goodId,
-            language = "",
-            content = "translation content",
-            lock = goodLock,
-        ),
+        translationRequest = KnthTranslationStub.prepareResult {
+            language = ""
+        },
     )
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
@@ -71,12 +61,9 @@ fun validationLanguageSymbols(command: KnthCommand, processor: KnthTranslationPr
         command = command,
         state = KnthState.NONE,
         workMode = KnthWorkMode.TEST,
-        translationRequest = KnthTranslation(
-            id = goodId,
-            language = "!@#\$%^&*(),.{}",
-            content = "translation content",
-            lock = goodLock,
-        ),
+        translationRequest = KnthTranslationStub.prepareResult {
+            language = "!@#\$%^&*(),.{}"
+        },
     )
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)

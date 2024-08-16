@@ -25,3 +25,15 @@ ktor:
 #  logger: socket
 #  socketLogger:
 #    port: 24224
+
+knowthenixkbd:
+  repository:
+    test: "inmemory"
+    prod: "$DB_TYPE_PROD:inmemory"
+    psql:
+      schema: public
+      database: "$KNTHTRS_DB:knowthenixkbd_tr"
+      host: "$KNTHTRS_HOST:localhost"
+      port: "$KNTHTRS_PORT:5432"
+      user: "$KNTHTRS_USER:postgres"
+      password: "$KNTHTRS_PASS:knowthenixkbd-pass"
