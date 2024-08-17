@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+management:
+  endpoint:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info,env
+
+spring:
+  jackson:
+    default-property-inclusion: non_null
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    use-root-path: true   # перепрыгивание с "/" на "/webjars/swagger-ui/index.html"
+    urls:
+      - name: v1
+        url: specs-translation-v1.yaml
+      - name: v2
+        url: specs-translation-v2.yaml
+
+knowthenixkbd:
+  repository:
+    test: "inmemory"
+    prod: "$DB_TYPE_PROD:inmemory"
+
+psql:
+  schema: public
+  database: "${KNTHTRS_DB:knowthenixkbd_tr}"
+  host: "${KNTHTRS_HOST:localhost}"
+  port: "${KNTHTRS_PORT:5432}"
+  user: "${KNTHTRS_USER:postgres}"
+  password: "${KNTHTRS_PASS:knowthenixkbd-pass}"

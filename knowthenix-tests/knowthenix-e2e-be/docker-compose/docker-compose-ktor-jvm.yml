@@ -1,0 +1,8 @@
+# Конфигурация для Ktor JVM + (в перспективе) postgresql
+
+version: '3'
+services:
+  app-ktor-jvm:
+    image: knowthenix-app-ktor-jvm:0.0.1
+    ports:
+      - "8080:8080"
