@@ -17,6 +17,8 @@ services:
     image: knowthenix-app-ktor-jvm:0.0.1
     # Порты приложения не должны открываться
     environment:
+      LOGS_FB_HOSTS: "fluent-bit"
+      LOGS_FB_PORT: 24224
       DB_TYPE_PROD: "postgres"
       KNTHTRS_HOST: "psql"
       KNTHTRS_PORT: 5432
@@ -30,26 +32,15 @@ services:
         condition: service_started
       psql:
         condition: service_healthy
-#      liquibase:
-#        condition: service_completed_successfully
-
-#  liquibase:
-#    image: liquibase/liquibase:4.29.1
-#    volumes:
-#      - ./volumes/liquibase-psql:/liquibase/changelog
-#    depends_on:
-#      psql:
-#        condition: service_healthy
-#    command: [ "--defaults-file=/liquibase/changelog/liquibase.properties", "--search-path=/liquibase/changelog", "--url=jdbc:postgresql://psql:5432/knowthenixkbd_tr", "update" ]
 
   psql:
     image: postgres:14.7
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    expose:
-      - "5432"
+#    ports:           # Порты можно открыть для проверки внешним SQL клиентом
+#      - "5432:5432"
+#    expose:
+#      - "5432"
     environment:
       POSTGRES_PASSWORD: "knowthenixkbd-pass"
       POSTGRES_USER: "postgres"
