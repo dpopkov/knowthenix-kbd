@@ -26,9 +26,13 @@ class RepoTranslationSql(
         else -> throw IllegalArgumentException("Unknown driver for url ${properties.url}")
     }
 
-    private val conn = Database.connect(
-        properties.url, driver, properties.user, properties.password
-    )
+    private val conn by lazy {
+        println(">>>>>>>>>>>>>>>>>>>>>> properties.url=${properties.url}")
+        println(">>>>>>>>>>>>>>>>>>>>>> driver=${driver}")
+        Database.connect(
+            properties.url, driver, properties.user, properties.password
+        )
+    }
 
     private fun saveObj(translation: KnthTranslation): KnthTranslation {
         return transaction(conn) {

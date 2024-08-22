@@ -7,6 +7,7 @@ import io.dpopkov.knowthenixkbd.common.helpers.errorSystem
 import io.dpopkov.knowthenixkbd.common.models.KnthCommand
 import io.dpopkov.knowthenixkbd.common.models.KnthState
 import io.dpopkov.knowthenixkbd.common.models.KnthWorkMode
+import io.dpopkov.knowthenixkbd.common.permissions.KnthUserGroups
 import io.dpopkov.knowthenixkbd.common.repo.IRepoTranslation
 import io.dpopkov.knowthenixkbd.cor.dsl.CorChainBuilder
 
@@ -34,10 +35,11 @@ fun CorChainBuilder<KnthContext>.initRepo(title: String, corSettings: KnthCorSet
                 marker = "BIZ",
                 data = workMode,
             )
-            translationRepo = when (workMode) {
-                KnthWorkMode.STUB -> corSettings.repoStub
-                KnthWorkMode.TEST -> corSettings.repoTest
-                KnthWorkMode.PROD -> corSettings.repoProd
+            translationRepo = when {
+                workMode == KnthWorkMode.STUB -> corSettings.repoStub
+                workMode == KnthWorkMode.TEST -> corSettings.repoTest
+                principal.groups.contains(KnthUserGroups.TEST) -> corSettings.repoTest
+                else -> corSettings.repoProd
             }
             logger.debug(msg = "Repository initialized: ${translationRepo::class.qualifiedName}")
             if (translationRepo == IRepoTranslation.NONE && workMode != KnthWorkMode.STUB) fail(

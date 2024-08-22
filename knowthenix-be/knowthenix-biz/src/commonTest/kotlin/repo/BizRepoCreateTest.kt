@@ -1,18 +1,20 @@
 package io.dpopkov.knowthenixkbd.biz.repo
 
 import io.dpopkov.knowthenixkbd.biz.KnthTranslationProcessor
+import io.dpopkov.knowthenixkbd.biz.addTestPrincipal
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.KnthCorSettings
 import io.dpopkov.knowthenixkbd.common.models.*
 import io.dpopkov.knowthenixkbd.common.repo.DbTranslationResponseOk
 import io.dpopkov.knowthenixkbd.repo.tests.TranslationRepositoryMock
+import io.dpopkov.knowthenixkbd.stubs.KnthTranslationStubItems
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
 class BizRepoCreateTest {
-    private val userId = KnthUserId("321")
+    private val userId = KnthTranslationStubItems.TRANSLATION_EN.ownerId
     private val command = KnthCommand.CREATE
     private val uuid = "10000000-0000-0000-0000-000000000001"
     private val repo = TranslationRepositoryMock(
@@ -42,11 +44,15 @@ class BizRepoCreateTest {
                 content = "abc",
                 visibility = KnthVisibility.VISIBLE_PUBLIC,
             ),
-        )
+        ).apply { addTestPrincipal() }
         
         processor.exec(ctx)
 
-        assertEquals(KnthState.FINISHING, ctx.state)
+        assertEquals(
+            expected = KnthState.FINISHING,
+            actual = ctx.state,
+            message = ctx.errorsAsString(),
+        )
         assertNotEquals(KnthTranslationId.NONE, ctx.translationResponse.id)
         assertEquals("ru", ctx.translationResponse.language)
         assertEquals("abc", ctx.translationResponse.content)

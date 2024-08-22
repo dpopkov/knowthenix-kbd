@@ -1,0 +1,21 @@
+# Keycloak - сервер идентификации
+#            чтобы посмотреть на imported realm
+
+# Адреса:
+# Управление пользователями http://localhost:8081 (keycloak)
+
+version: '3'
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.2 # Ok
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./volumes/keycloak/import:/opt/keycloak/data/import
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command:
+      - start-dev
+      - --hostname-port=8081
+      - --import-realm

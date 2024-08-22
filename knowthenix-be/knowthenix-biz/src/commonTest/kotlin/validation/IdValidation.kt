@@ -1,6 +1,7 @@
 package io.dpopkov.knowthenixkbd.biz.validation
 
 import io.dpopkov.knowthenixkbd.biz.KnthTranslationProcessor
+import io.dpopkov.knowthenixkbd.biz.addTestPrincipal
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.models.*
 import io.dpopkov.knowthenixkbd.stubs.KnthTranslationStub
@@ -15,7 +16,7 @@ fun validationIdCorrect(command: KnthCommand, processor: KnthTranslationProcesso
         state = KnthState.NONE,
         workMode = KnthWorkMode.TEST,
         translationRequest = KnthTranslationStub.get(),
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
     assertNotEquals(KnthState.FAILING, ctx.state)
@@ -31,7 +32,7 @@ fun validationIdTrim(command: KnthCommand, processor: KnthTranslationProcessor) 
             stubId = this.id
             id = KnthTranslationId(" \n\t ${stubId.asString()} \n\t ")
         }
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
     assertNotEquals(KnthState.FAILING, ctx.state)
@@ -46,7 +47,7 @@ fun validationIdEmpty(command: KnthCommand, processor: KnthTranslationProcessor)
         translationRequest = KnthTranslationStub.prepareResult {
             id = KnthTranslationId("")
         },
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
     assertEquals(KnthState.FAILING, ctx.state)
@@ -63,7 +64,7 @@ fun validationIdFormat(command: KnthCommand, processor: KnthTranslationProcessor
         translationRequest = KnthTranslationStub.prepareResult {
             id = KnthTranslationId("!@#\$%^&*(),.{}")
         },
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
     assertEquals(KnthState.FAILING, ctx.state)

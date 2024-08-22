@@ -1,0 +1,92 @@
+# Версия инфраструктуры на базе
+# Envoy - прокси
+# Keycloak - сервер идентификации
+
+# Адреса:
+# Приложение доступно по http://localhost:8080 (envoy прокси)
+# Управление пользователями http://localhost:8081 (keycloak)
+# PostgreSQL (когда открыт порт):  jdbc:postgresql://localhost:5432/knowthenixkbd_tr
+
+version: '3'
+services:
+  app:
+    image: knowthenix-app-ktor-jvm:0.0.1
+    # Порты приложения не должны открываться
+    environment:
+      DB_TYPE_PROD: "postgres"
+      KNTHTRS_HOST: "psql"
+      KNTHTRS_PORT: 5432
+      KNTHTRS_DB: "knowthenixkbd_tr"
+      KNTHTRS_USER: "postgres"
+      KNTHTRS_PASS: "knowthenixkbd-pass"
+    depends_on:
+      psql:
+        condition: service_healthy
+#      liquibase:
+#        condition: service_completed_successfully
+
+#  liquibase:
+#    image: liquibase/liquibase:4.29.1
+#    volumes:
+#      - ./volumes/liquibase-psql:/liquibase/changelog
+#    depends_on:
+#      psql:
+#        condition: service_healthy
+#    command: [ "--defaults-file=/liquibase/changelog/liquibase.properties", "--search-path=/liquibase/changelog", "--url=jdbc:postgresql://psql:5432/knowthenixkbd_tr", "update" ]
+
+  psql:
+    image: postgres:14.7
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_PASSWORD: "knowthenixkbd-pass"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "knowthenixkbd_tr"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  envoy:
+    image: envoyproxy/envoy:v1.29.0  # Use the official Envoy proxy image
+    volumes:
+      - ./volumes/envoy/envoy-knth.yaml:/etc/envoy/envoy.yaml  # Mount your Envoy configuration file
+    ports:
+      - "8080:8080"
+    depends_on:
+      keycloak:
+        condition: service_healthy
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.4
+    # Порты keycloak должны быть закрыты. Открывать только для тестового получения access-token.
+    ports:
+      - "8081:8080"  # В примере порты закомментированы, то тогда не могу получить access-token. С ОТКРЫТЫМИ ПРИЛОЖЕНИЕ РАБОТАЕТ!!!
+    volumes:
+      - ./volumes/keycloak/import-knth:/opt/keycloak/data/import
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: "true"
+      KC_HOSTNAME_URL: "http://localhost:8080/" # 8080 не пускает на UI, 8081 - "Jwt issuer is not configured"
+                                    # Когда KC_HOSTNAME_URL полностью закомментирован, то token отдает и пускает на UI,
+                                    # но при запросе на приложение отдает "Jwt issuer is not configured"
+    healthcheck:
+      test: [ "CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e \"GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n\" >&3;grep \"HTTP/1.1 200 OK\" <&3"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command:
+      - start-dev
+      - --hostname-port=8081
+      - --import-realm
+      - --proxy-headers=forwarded
+      - --hostname-strict=false
+
+volumes:
+  postgres_data:

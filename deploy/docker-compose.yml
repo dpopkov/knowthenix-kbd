@@ -121,7 +121,6 @@ services:
       KEYCLOAK_PASSWORD: otus
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      KEYCLOAK_IMPORT: "/tmp/realm-export.json"
     command:
       - start-dev
       #      - --features admin-fine-grained-authz

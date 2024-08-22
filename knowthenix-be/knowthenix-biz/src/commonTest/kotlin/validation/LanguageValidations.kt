@@ -1,6 +1,7 @@
 package io.dpopkov.knowthenixkbd.biz.validation
 
 import io.dpopkov.knowthenixkbd.biz.KnthTranslationProcessor
+import io.dpopkov.knowthenixkbd.biz.addTestPrincipal
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.models.*
 import io.dpopkov.knowthenixkbd.stubs.KnthTranslationStub
@@ -15,9 +16,9 @@ fun validationLanguageCorrect(command: KnthCommand, processor: KnthTranslationPr
         state = KnthState.NONE,
         workMode = KnthWorkMode.TEST,
         translationRequest = KnthTranslationStub.get(),
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
-    assertEquals(0, ctx.errors.size)
+    assertEquals(0, ctx.errors.size, ctx.errorsAsString())
     assertNotEquals(KnthState.FAILING, ctx.state)
     assertEquals("en", ctx.translationValidated.language)
 }
@@ -32,9 +33,9 @@ fun validationLanguageTrim(command: KnthCommand, processor: KnthTranslationProce
             stubLang = this.language
             language = " \n\t $stubLang \t\n "
         },
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
-    assertEquals(0, ctx.errors.size)
+    assertEquals(0, ctx.errors.size, ctx.errorsAsString())
     assertNotEquals(KnthState.FAILING, ctx.state)
     assertEquals(stubLang, ctx.translationValidated.language)
 }
@@ -47,7 +48,7 @@ fun validationLanguageEmpty(command: KnthCommand, processor: KnthTranslationProc
         translationRequest = KnthTranslationStub.prepareResult {
             language = ""
         },
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
     assertEquals(KnthState.FAILING, ctx.state)
@@ -64,7 +65,7 @@ fun validationLanguageSymbols(command: KnthCommand, processor: KnthTranslationPr
         translationRequest = KnthTranslationStub.prepareResult {
             language = "!@#\$%^&*(),.{}"
         },
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
     assertEquals(KnthState.FAILING, ctx.state)

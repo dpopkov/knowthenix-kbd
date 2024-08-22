@@ -1,6 +1,8 @@
 package io.dpopkov.knowthenixkbd.common
 
 import io.dpopkov.knowthenixkbd.common.models.*
+import io.dpopkov.knowthenixkbd.common.permissions.KnthPrincipalModel
+import io.dpopkov.knowthenixkbd.common.permissions.KnthUserPermissions
 import io.dpopkov.knowthenixkbd.common.repo.IRepoTranslation
 import io.dpopkov.knowthenixkbd.common.stubs.KnthStubs
 import io.dpopkov.knowthenixkbd.common.ws.IKnthWsSession
@@ -34,6 +36,13 @@ data class KnthContext(
     var workMode: KnthWorkMode = KnthWorkMode.PROD,
     /** Стаб используемый только в режиме стабов */
     var stubCase: KnthStubs = KnthStubs.NONE,
+
+    /** Принципал осуществляющий запрос */
+    var principal: KnthPrincipalModel = KnthPrincipalModel.NONE,
+    /** Разрешения для принципала определенные на основании его групп (ролей) */
+    val permissionsChain: MutableSet<KnthUserPermissions> = mutableSetOf(),
+    /** Итоговый флаг разрешения выполнения принципалом запрашиваемой операции */
+    var permitted: Boolean = false,
 
     /** Информация о текущей websocket сессии, если она есть. */
     var wsSession: IKnthWsSession = IKnthWsSession.NONE,
@@ -90,5 +99,12 @@ data class KnthContext(
     fun fail(errors: Collection<KnthError>) {
         addErrors(errors)
         this.state = KnthState.FAILING
+    }
+
+    fun errorsAsString() = buildString {
+        append("Errors in context:\n")
+        errors.forEachIndexed { index, err ->
+            append("${index}: $err\n")
+        }
     }
 }
