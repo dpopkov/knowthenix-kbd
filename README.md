@@ -70,6 +70,10 @@ Web приложение предоставляет пользователю м�
 1. [knowthenix-repo-tests](knowthenix-be/knowthenix-repo-tests) - Базовые тесты для репозиториев всех баз данных.
 2. [knowthenix-repo-common](knowthenix-be/knowthenix-repo-common) - Модуль с общими классами для всех репозиториев.
 3. [knowthenix-repo-inmemory](knowthenix-be/knowthenix-repo-inmemory) - Репозиторий на базе кэша in-memory для тестирования.
+4. [knowthenix-repo-postgres](knowthenix-be/knowthenix-repo-postgres) - Репозиторий на PostgreSQL.
+
+#### Аутентификация, авторизация
+1. [knowthenix-auth](knowthenix-be/knowthenix-auth)
 
 ### Библиотеки
 
