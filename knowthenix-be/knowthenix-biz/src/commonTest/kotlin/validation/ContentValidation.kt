@@ -1,6 +1,7 @@
 package io.dpopkov.knowthenixkbd.biz.validation
 
 import io.dpopkov.knowthenixkbd.biz.KnthTranslationProcessor
+import io.dpopkov.knowthenixkbd.biz.addTestPrincipal
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.models.*
 import io.dpopkov.knowthenixkbd.stubs.KnthTranslationStub
@@ -10,15 +11,15 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
 fun validationContentCorrect(command: KnthCommand, processor: KnthTranslationProcessor) = runTest {
-    var stubContent = ""
+    var stubContent: String
     val ctx = KnthContext(
         command = command,
         state = KnthState.NONE,
         workMode = KnthWorkMode.TEST,
         translationRequest = KnthTranslationStub.get().also { stubContent = it.content },
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
-    assertEquals(0, ctx.errors.size)
+    assertEquals(0, ctx.errors.size, ctx.errorsAsString())
     assertNotEquals(KnthState.FAILING, ctx.state)
     assertEquals(stubContent, ctx.translationValidated.content)
 }
@@ -33,7 +34,7 @@ fun validationContentTrim(command: KnthCommand, processor: KnthTranslationProces
             stubContent = this.content
             content = " \n\t $stubContent \n\t "
         },
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
     assertNotEquals(KnthState.FAILING, ctx.state)
@@ -48,7 +49,7 @@ fun validationContentEmpty(command: KnthCommand, processor: KnthTranslationProce
         translationRequest = KnthTranslationStub.prepareResult {
             content = ""
         },
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
     assertEquals(KnthState.FAILING, ctx.state)
@@ -65,7 +66,7 @@ fun validationContentSymbols(command: KnthCommand, processor: KnthTranslationPro
         translationRequest = KnthTranslationStub.prepareResult {
             content = "!@#\$%^&*(),.{}"
         },
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
     assertEquals(KnthState.FAILING, ctx.state)

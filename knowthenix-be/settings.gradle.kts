@@ -50,3 +50,6 @@ include(":knowthenix-repo-inmemory")
 include(":knowthenix-repo-stubs")
 include(":knowthenix-repo-tests")
 include(":knowthenix-repo-postgres")
+
+// Authorization
+include(":knowthenix-auth")

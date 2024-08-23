@@ -1,19 +1,21 @@
 package io.dpopkov.knowthenixkbd.biz.repo
 
 import io.dpopkov.knowthenixkbd.biz.KnthTranslationProcessor
+import io.dpopkov.knowthenixkbd.biz.addTestPrincipal
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.KnthCorSettings
 import io.dpopkov.knowthenixkbd.common.models.*
 import io.dpopkov.knowthenixkbd.common.repo.DbTranslationResponseErr
 import io.dpopkov.knowthenixkbd.common.repo.DbTranslationResponseOk
 import io.dpopkov.knowthenixkbd.repo.tests.TranslationRepositoryMock
+import io.dpopkov.knowthenixkbd.stubs.KnthTranslationStubItems
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class BizRepoDeleteTest {
-    private val userId = KnthUserId("321")
+    private val userId = KnthTranslationStubItems.TRANSLATION_EN.ownerId
     private val command = KnthCommand.DELETE
     private val initTranslation = KnthTranslation(
         id = KnthTranslationId("id-to-delete-123"),
@@ -50,7 +52,7 @@ class BizRepoDeleteTest {
             state = KnthState.NONE,
             workMode = KnthWorkMode.TEST,
             translationRequest = translationToDelete,
-        )
+        ).apply { addTestPrincipal() }
         
         processor.exec(ctx)
 

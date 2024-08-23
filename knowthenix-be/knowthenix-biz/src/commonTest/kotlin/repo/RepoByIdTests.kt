@@ -1,6 +1,7 @@
 package io.dpopkov.knowthenixkbd.biz.repo
 
 import io.dpopkov.knowthenixkbd.biz.KnthTranslationProcessor
+import io.dpopkov.knowthenixkbd.biz.addTestPrincipal
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.KnthCorSettings
 import io.dpopkov.knowthenixkbd.common.models.*
@@ -42,7 +43,7 @@ fun repoNotFoundTest(command: KnthCommand) = runTest {
             visibility = KnthVisibility.VISIBLE_PUBLIC,
             lock = KnthTranslationLock("old-lock-123"),
         ),
-    )
+    ).apply { addTestPrincipal() }
 
     processor.exec(ctx)
 

@@ -3,9 +3,11 @@ package io.dpopkov.knowthenixkbd.app.ktorjvm.repo
 import io.dpopkov.knowthenixkbd.api.v1.apiV1Mapper
 import io.dpopkov.knowthenixkbd.api.v1.models.*
 import io.dpopkov.knowthenixkbd.app.ktorjvm.KnthAppSettings
+import io.dpopkov.knowthenixkbd.app.ktorjvm.auth.addAuth
 import io.dpopkov.knowthenixkbd.app.ktorjvm.module
 import io.dpopkov.knowthenixkbd.common.models.KnthTranslationId
 import io.dpopkov.knowthenixkbd.common.models.KnthTranslationLock
+import io.dpopkov.knowthenixkbd.common.permissions.KnthUserGroups
 import io.dpopkov.knowthenixkbd.mappers.v1.toTransportCreate
 import io.dpopkov.knowthenixkbd.mappers.v1.toTransportDelete
 import io.dpopkov.knowthenixkbd.mappers.v1.toTransportRead
@@ -153,6 +155,7 @@ abstract class V1TranslationRepoBaseTest {
         val response: HttpResponse = client.post("/v1/translation/$operation") {
             contentType(ContentType.Application.Json)
             header("X-Trace-Id", "12345")
+            addAuth(groups = listOf(KnthUserGroups.USER))
             setBody(request)
         }
         assertingBlock(response)

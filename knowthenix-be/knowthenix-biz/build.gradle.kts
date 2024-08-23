@@ -14,6 +14,7 @@ kotlin {
 
                 implementation(project(":knowthenix-common"))
                 implementation(project(":knowthenix-stubs"))
+                implementation(projects.knowthenixAuth)
             }
         }
         commonTest {

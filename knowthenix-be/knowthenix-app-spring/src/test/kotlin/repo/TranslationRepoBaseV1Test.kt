@@ -1,10 +1,15 @@
 package io.dpopkov.knowthenixkbd.app.spring.repo
 
 import io.dpopkov.knowthenixkbd.api.v1.models.*
+import io.dpopkov.knowthenixkbd.app.common.AUTH_HEADER
+import io.dpopkov.knowthenixkbd.app.common.createJwtTestHeader
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.models.*
+import io.dpopkov.knowthenixkbd.common.permissions.KnthPrincipalModel
+import io.dpopkov.knowthenixkbd.common.permissions.KnthUserGroups
 import io.dpopkov.knowthenixkbd.mappers.v1.*
 import io.dpopkov.knowthenixkbd.stubs.KnthTranslationStub
+import io.dpopkov.knowthenixkbd.stubs.KnthTranslationStubItems
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
@@ -26,7 +31,7 @@ internal abstract class TranslationRepoBaseV1Test {
         expectObj = prepareCtx(
             KnthTranslationStub.prepareResult {
                 id = KnthTranslationId(uuidNew)
-                ownerId = KnthUserId.NONE
+                ownerId = KnthTranslationStubItems.TRANSLATION_EN.ownerId
                 lock = KnthTranslationLock(uuidNew)
             }
         ).toTransportCreate()
@@ -83,7 +88,6 @@ internal abstract class TranslationRepoBaseV1Test {
         expectObj = KnthContext(
             state = KnthState.RUNNING,
             translationsResponse = KnthTranslationStub.prepareSearchList(filter = "test-filter")
-                .onEach { it.permissionsClient.clear() }
                 .sortedBy { it.id.asString() }
                 .toMutableList(),
         ).toTransportSearch()
@@ -92,21 +96,23 @@ internal abstract class TranslationRepoBaseV1Test {
 
     private fun prepareCtx(translation: KnthTranslation) = KnthContext(
         state = KnthState.RUNNING,
-        translationResponse = translation.apply {
-            // todo: Пока не реализована эта функциональность
-            permissionsClient.clear()
-        },
+        translationResponse = translation,
     )
 
     private inline fun <reified Req : IRequest, reified Res : IResponse> testRepoTranslation(
         url: String,
         requestObj: Req,
         expectObj: Res,
+        principal: KnthPrincipalModel = KnthPrincipalModel(
+            id = KnthTranslationStubItems.TRANSLATION_EN.ownerId,
+            groups = setOf(KnthUserGroups.TEST, KnthUserGroups.USER),
+        )
     ) {
         webClient
             .post()
             .uri("/v1/translation/$url")
             .contentType(MediaType.APPLICATION_JSON)
+            .header(AUTH_HEADER, principal.createJwtTestHeader())
             .body(BodyInserters.fromValue(requestObj))
             .exchange()
             .expectStatus().isOk

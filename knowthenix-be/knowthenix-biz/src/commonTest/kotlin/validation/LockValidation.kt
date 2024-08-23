@@ -2,6 +2,7 @@ package io.dpopkov.knowthenixkbd.biz.validation
 
 import kotlinx.coroutines.test.runTest
 import io.dpopkov.knowthenixkbd.biz.KnthTranslationProcessor
+import io.dpopkov.knowthenixkbd.biz.addTestPrincipal
 import io.dpopkov.knowthenixkbd.common.KnthContext
 import io.dpopkov.knowthenixkbd.common.models.*
 import io.dpopkov.knowthenixkbd.stubs.KnthTranslationStub
@@ -15,7 +16,7 @@ fun validationLockCorrect(command: KnthCommand, processor: KnthTranslationProces
         state = KnthState.NONE,
         workMode = KnthWorkMode.TEST,
         translationRequest = KnthTranslationStub.get(),
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
     assertNotEquals(KnthState.FAILING, ctx.state)
@@ -31,7 +32,7 @@ fun validationLockTrim(command: KnthCommand, processor: KnthTranslationProcessor
             stubLock = this.lock
             lock = KnthTranslationLock(" \n\t ${stubLock.asString()} \n\t ")
         }
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
     assertNotEquals(KnthState.FAILING, ctx.state)
@@ -46,7 +47,7 @@ fun validationLockEmpty(command: KnthCommand, processor: KnthTranslationProcesso
         translationRequest = KnthTranslationStub.prepareResult {
             lock = KnthTranslationLock("")
         }
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
     assertEquals(KnthState.FAILING, ctx.state)
@@ -63,7 +64,7 @@ fun validationLockFormat(command: KnthCommand, processor: KnthTranslationProcess
         translationRequest = KnthTranslationStub.prepareResult {
             lock = KnthTranslationLock("!@#\$%^&*(),.{}")
         }
-    )
+    ).apply { addTestPrincipal() }
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
     assertEquals(KnthState.FAILING, ctx.state)

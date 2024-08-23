@@ -1,6 +1,9 @@
 package io.dpopkov.knowthenixkbd.common.helpers
 
+import io.dpopkov.knowthenixkbd.common.models.KnthCommand
 import io.dpopkov.knowthenixkbd.common.models.KnthError
+import io.dpopkov.knowthenixkbd.common.models.KnthTranslationId
+import io.dpopkov.knowthenixkbd.common.permissions.KnthPrincipalModel
 import io.dpopkov.knowthenixkbd.logging.common.LogLevel
 
 fun Throwable.asKnthError(
@@ -19,7 +22,7 @@ fun Throwable.asKnthError(
 /**
  * Хелпер для формирования ошибок валидации.
  */
-inline fun errorValidation(
+fun errorValidation(
     /** Валидируемое поле - источник ошибки */
     field: String,
     /**
@@ -38,7 +41,7 @@ inline fun errorValidation(
     level = level,
 )
 
-inline fun errorSystem(
+fun errorSystem(
     /**
      * Краткий уникальный код, характеризующий тип ошибки валидации.
      * Должен включать признак нарушения, но не должен включать имя поля источника ошибки
@@ -53,4 +56,16 @@ inline fun errorSystem(
     message = "System error occurred. Our stuff has been informed, please retry later",
     level = level,
     exception = e,
+)
+
+fun accessViolation(
+    principal: KnthPrincipalModel,
+    operation: KnthCommand,
+    translationId: KnthTranslationId = KnthTranslationId.NONE,
+) = KnthError(
+    code = "access-${operation.name.lowercase()}",
+    group = "access",
+    message = "User ${principal.genericName()} (${principal.id.asString()}) is not allowed to perform operation ${operation.name}"
+            + if (translationId != KnthTranslationId.NONE) " on translation ${translationId.asString()}" else "",
+    level = LogLevel.ERROR,
 )

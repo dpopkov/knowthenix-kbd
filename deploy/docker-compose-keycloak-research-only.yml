@@ -1,0 +1,31 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.4
+    # Порты keycloak не должны открываться (ТОЛЬКО ДЛЯ ПОЛУЧЕНИЯ ACCESS-TOKEN)
+    ports:
+      - "8081:8080"  # В примере порты закомментированы, то тогда не могу получить access-token. С ОТКРЫТЫМИ ПРИЛОЖЕНИЕ РАБОТАЕТ!!!
+    volumes:
+      - ./volumes/keycloak/import-knth:/opt/keycloak/data/import
+#      - ./volumes/keycloak/import:/opt/keycloak/data/import
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: "true"
+#      KC_HOSTNAME_URL: "http://localhost:8080/" # FOCUS: 8080 не пускает на UI, меняю на 8081
+#                                                # FOCUS-RESULT: если 8081, то пускает на UI, но "Jwt issuer is not configured"
+    # Когда KC_HOSTNAME_URL полностью закомментирован, то token отдает и пускает на UI, но "Jwt issuer is not configured"
+    # Пробую закомментировать еще раз - нет, при запросе на приложение отдает "Jwt issuer is not configured".
+
+    healthcheck:
+      test: [ "CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e \"GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n\" >&3;grep \"HTTP/1.1 200 OK\" <&3"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command:
+      - start-dev
+      #      - --features admin-fine-grained-authz
+      - --hostname-port=8081
+      - --import-realm
+#      - --proxy edge
+      - --proxy-headers=forwarded
+      - --hostname-strict=false

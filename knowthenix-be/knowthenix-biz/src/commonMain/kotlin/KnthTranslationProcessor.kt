@@ -1,5 +1,9 @@
 package io.dpopkov.knowthenixkbd.biz
 
+import io.dpopkov.knowthenixkbd.biz.permissions.accessValidation
+import io.dpopkov.knowthenixkbd.biz.permissions.chainPermissions
+import io.dpopkov.knowthenixkbd.biz.permissions.frontPermissions
+import io.dpopkov.knowthenixkbd.biz.permissions.searchTypes
 import io.dpopkov.knowthenixkbd.biz.plugins.getLoggerProviderConf
 import io.dpopkov.knowthenixkbd.biz.repo.*
 import io.dpopkov.knowthenixkbd.biz.stubs.*
@@ -36,6 +40,7 @@ class KnthTranslationProcessor(
                 stubDbError("Имитация ошибки работы с БД")
                 stubNoCase("Ошибка: запрошенный стаб недопустим")
             }
+            chainPermissions("Вычисление разрешений для пользователя")
             validation {
                 worker("Копируем для валидации") { translationValidating = translationRequest.deepCopy() }
                 worker("Удаление id") { translationValidating.id = KnthTranslationId.NONE }
@@ -51,8 +56,10 @@ class KnthTranslationProcessor(
             chain {
                 title = "Логика сохранения"
                 repoPrepareCreate("Подготовка перевода для сохранения")
+                accessValidation("Вычисление прав доступа")
                 repoCreate("Создание перевода в БД")
             }
+            frontPermissions("Вычисление пользовательских разрешений для фронтенда")
             prepareResult("Подготовка ответа")
         }
         operation("Получение перевода", KnthCommand.READ) {
@@ -62,6 +69,7 @@ class KnthTranslationProcessor(
                 stubDbError("Имитация ошибки работы с БД")
                 stubNoCase("Ошибка: запрошенный стаб недопустим")
             }
+            chainPermissions("Вычисление разрешений для пользователя")
             validation {
                 worker("Копируем для валидации") { translationValidating = translationRequest.deepCopy() }
                 worker("Очистка id") { translationValidating.id = translationValidating.id.trim() }
@@ -73,12 +81,14 @@ class KnthTranslationProcessor(
             chain {
                 title = "Логика чтения"
                 repoRead("Чтение перевода из БД")
+                accessValidation("Вычисление прав доступа")
                 worker {
                     title = "Подготовка ответа для Read"
                     on { state == KnthState.RUNNING }
                     handle { translationRepoDone = translationRepoRead }
                 }
             }
+            frontPermissions("Вычисление пользовательских разрешений для фронтенда")
             prepareResult("Подготовка ответа")
         }
         operation("Изменить перевод", KnthCommand.UPDATE) {
@@ -90,6 +100,7 @@ class KnthTranslationProcessor(
                 stubDbError("Имитация ошибки работы с БД")
                 stubNoCase("Ошибка: запрошенный стаб недопустим")
             }
+            chainPermissions("Вычисление разрешений для пользователя")
             validation {
                 worker("Копируем для валидации") { translationValidating = translationRequest.deepCopy() }
                 worker("Очистка id") { translationValidating.id = translationValidating.id.trim() }
@@ -110,10 +121,12 @@ class KnthTranslationProcessor(
             chain {
                 title = "Логика изменения перевода"
                 repoRead("Чтение перевода из БД")
+                accessValidation("Вычисление прав доступа")
                 checkLock("Проверяем консистентность по оптимистичной блокировке")
                 repoPrepareUpdate("Подготовка перевода для изменения")
                 repoUpdate("Обновление перевода в БД")
             }
+            frontPermissions("Вычисление пользовательских разрешений для фронтенда")
             prepareResult("Подготовка ответа")
         }
         operation("Удалить перевод", KnthCommand.DELETE) {
@@ -123,6 +136,7 @@ class KnthTranslationProcessor(
                 stubDbError("Имитация ошибки работы с БД")
                 stubNoCase("Ошибка: запрошенный стаб недопустим")
             }
+            chainPermissions("Вычисление разрешений для пользователя")
             validation {
                 worker("Копируем для валидации") { translationValidating = translationRequest.deepCopy() }
                 worker("Очистка id") { translationValidating.id = translationValidating.id.trim() }
@@ -137,10 +151,12 @@ class KnthTranslationProcessor(
             chain {
                 title = "Логика удаления"
                 repoRead("Чтение перевода из БД")
+                accessValidation("Вычисление прав доступа")
                 checkLock("Проверяем консистентность по оптимистичной блокировке")
                 repoPrepareDelete("Подготовка перевода для удаления")
                 repoDelete("Удаление перевода из БД")
             }
+            frontPermissions("Вычисление пользовательских разрешений для фронтенда")
             prepareResult("Подготовка ответа")
         }
         operation("Поиск переводов", KnthCommand.SEARCH) {
@@ -149,13 +165,17 @@ class KnthTranslationProcessor(
                 stubDbError("Имитация ошибки работы с БД")
                 stubNoCase("Ошибка: запрошенный стаб недопустим")
             }
+            chainPermissions("Вычисление разрешений для пользователя")
             validation {
                 worker("Копируем для валидации") { translationFilterValidating = translationFilterRequest.deepCopy() }
                 validateSearchStringLength("Валидация длины строки поиска в фильтре")
 
                 finishTranslationFilterValidation("Завершение проверок")
             }
+            searchTypes("Подготовка поискового запроса")
+
             repoSearch("Поиск переводов в БД по фильтру")
+            frontPermissions("Вычисление пользовательских разрешений для фронтенда")
             prepareResult("Подготовка ответа")
         }
     }.build()

@@ -2,7 +2,9 @@ package io.dpopkov.knowthenixkbd.app.ktorjvm.v1
 
 import io.dpopkov.knowthenixkbd.api.v1.models.IRequest
 import io.dpopkov.knowthenixkbd.api.v1.models.IResponse
+import io.dpopkov.knowthenixkbd.app.common.AUTH_HEADER
 import io.dpopkov.knowthenixkbd.app.common.controllerHelper
+import io.dpopkov.knowthenixkbd.app.common.jwt2principal
 import io.dpopkov.knowthenixkbd.app.ktorjvm.KnthAppSettings
 import io.dpopkov.knowthenixkbd.mappers.v1.fromTransport
 import io.dpopkov.knowthenixkbd.mappers.v1.toTransportTranslation
@@ -17,6 +19,7 @@ suspend inline fun <reified Q : IRequest, reified R : IResponse> ApplicationCall
     logId: String,
 ) = appSettings.controllerHelper(
     getRequest = {
+        this.principal = this@processV1.request.header(AUTH_HEADER).jwt2principal() // получение принципала из JWT
         val req: Q = this@processV1.receive<Q>()   // извлечение из фреймворка тела запроса
         fromTransport(req)
     },

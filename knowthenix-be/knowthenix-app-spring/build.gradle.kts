@@ -67,4 +67,8 @@ tasks {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    val testDb = "knth_test_db"
+    environment("KNTHTRS_DB", testDb)
+
+    println("Environment KNTHTRS_DB = $testDb")     // todo: remove after check
 }
